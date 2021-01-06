@@ -1,0 +1,2 @@
+# Rehkbot
+Personal Discord bot 
