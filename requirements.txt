@@ -9,7 +9,7 @@ attrs==20.3.0
 chardet==4.0.0
 idna==3.1
 multidict==5.1.0
-websockets==6.0
+websockets==8.1
 yarl==1.6.3
 random2==1.0.1
 youtube_dl==2021.1.3
