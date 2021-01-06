@@ -6,7 +6,7 @@ urllib3==1.26.2
 requests==2.25.1
 async-timeout==3.0.1
 attrs==20.3.0
-chardet==3.0.4
+chardet==4.0.0
 idna==3.1
 multidict==5.1.0
 websockets==6.0
