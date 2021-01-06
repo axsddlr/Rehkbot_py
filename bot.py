@@ -386,6 +386,7 @@ async def logout(ctx):
 
 
 @bot.command()
+@commands.has_any_role(236267540777533440)
 async def profile(ctx, user: discord.User = ''):
 
     if not user:
