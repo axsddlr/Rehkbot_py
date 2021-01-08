@@ -1,6 +1,7 @@
 # Config
 config.py
 info.json
+headers.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
