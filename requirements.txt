@@ -1,4 +1,4 @@
-aiohttp==3.7.3
+aiohttp>=3.6.0
 discord.py==1.5.1
 discord==1.0.1
 python-dotenv==0.15.0
@@ -6,9 +6,9 @@ urllib3==1.26.2
 requests==2.25.1
 async-timeout==3.0.1
 attrs==20.3.0
-chardet==4.0.0
-idna==3.1
-multidict==5.1.0
+cchardet==2.1.7
+idna>=2.5
+multidict>=4.5
 websockets==8.1
 yarl==1.6.3
 random2==1.0.1
