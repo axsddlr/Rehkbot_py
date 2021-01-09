@@ -29,8 +29,6 @@ class BadwordsCog(commands.Cog):
                 mention = msg.author.mention
                 await msg.channel.send(f"{ mention } THAT WORD IS NOT PERMITTED!")
 
-        await self.bot.process_commands(msg)
-
 # The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case SimpleCog.
 # When we load the cog, we use the name of the file.
 
