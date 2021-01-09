@@ -7,6 +7,7 @@ import traceback
 from dotenv import load_dotenv
 
 load_dotenv()
+TOKEN = os.getenv('DISCORD_TOKEN')
 
 
 def get_prefix(bot, message):
@@ -24,21 +25,22 @@ def get_prefix(bot, message):
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
 
-# Below cogs represents our folder our cogs are in. Following is the file name. So 'meme.py' in cogs, would be cogs.meme
-# Think of it like a dot path import
-initial_extensions = [
-    'cogs.music',
-    'cogs.badwords',
-    'cogs.valorant',
-    'cogs.commands']
-
 bot = commands.Bot(command_prefix=get_prefix,
                    description='A Rewrite Cog Example')
 
-# Here we load our extensions(cogs) listed above in [initial_extensions].
+
+# This is what we're going to use to load the cogs on startup
 if __name__ == '__main__':
-    for extension in initial_extensions:
-        bot.load_extension(extension)
+     for filename in os.listdir("./cogs"):
+        if filename.endswith(".py"):  # We only want to check through the python files
+         try:  # I'd rather have this try/except block as I'd like it to load even if there is an issue with the cogs
+            # This will load it
+            bot.load_extension("cogs.{0}".format(filename[:-3]))
+            # this is to let us know which cogs got loaded
+            print("{0} is online".format(filename[:-3]))
+         except:
+            print("{0} was not loaded".format(filename))
+            continue
 
 
 @bot.event
@@ -49,4 +51,4 @@ async def on_ready():
     print('Bot connected.')
 
 
-bot.run(os.environ['DISCORD_TOKEN'], bot=True, reconnect=True)
+bot.run(TOKEN, bot=True, reconnect=True)
