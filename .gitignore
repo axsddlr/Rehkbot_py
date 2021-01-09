@@ -2,6 +2,7 @@
 config.py
 info.json
 headers.json
+graph.png
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
