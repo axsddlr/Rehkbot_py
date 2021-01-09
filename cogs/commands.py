@@ -1,5 +1,6 @@
 import discord
 import random
+import time
 from discord.ext import commands
 
 
@@ -16,7 +17,7 @@ class CommandsCog(commands.Cog):
     @commands.command(name='ping', help='check if bot is working')
     @commands.has_any_role(236267540777533440)
     async def ping(self, ctx):
-        await ctx.send("pong.")
+        await ctx.send(f'My Latency : {round(self.bot.latency*1000)}ms')
 
     @commands.command(aliases=['pfp'], name='avi', help='Get the avatar URL of the tagged user(s), or your own avatar')
     async def avatar(self, ctx, user: discord.User = ''):
