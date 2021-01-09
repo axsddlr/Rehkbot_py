@@ -32,6 +32,8 @@ class BadwordsCog(commands.Cog):
 # The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case SimpleCog.
 # When we load the cog, we use the name of the file.
 
+# close all open files
+f1.close()
 
 def setup(bot):
     bot.add_cog(BadwordsCog(bot))
