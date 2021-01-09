@@ -218,7 +218,7 @@ class ValorantCog(commands.Cog):
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', check=check, timeout=120)
                 except asyncio.TimeoutError:
-                    await msg.remove_reaction('📈', bot.user)
+                    await msg.remove_reaction('📈', self.bot.user)
                     break
 
                 image = await self.graph(user_id)
