@@ -6,6 +6,12 @@ from discord.ext import commands
 class CommandsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        
+    @commands.command()
+    @commands.guild_only()
+    async def joined(self, ctx, *, member: discord.Member):
+        """Says when a member joined."""
+        await ctx.send(f'{member.display_name} joined on {member.joined_at}')
 
     @commands.command(name='ping', help='check if bot is working')
     @commands.has_any_role(236267540777533440)
