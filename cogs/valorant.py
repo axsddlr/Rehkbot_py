@@ -85,7 +85,7 @@ async def process_stats(author, num_matches=3):
 
     return stats, rank_num, rank, RP, ELO
 
-class ValorantCog(commands.Cog):
+class ValorantCog(commands.Cog, name='Valorant'):
     def __init__(self, bot):
         self.bot = bot
 
