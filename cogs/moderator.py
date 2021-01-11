@@ -31,7 +31,7 @@ class ModeratorCog(commands.Cog, name='Moderator'):
 
     @commands.command(aliases=['m'])
     @commands.has_permissions(kick_members=True)
-    async def mute(ctx, member: discord.Member):
+    async def mute(self, ctx, member: discord.Member):
         muted_role = ctx.guild.get_role(bot_id)
 
         await member.add_roles(muted_role)
