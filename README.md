@@ -7,6 +7,31 @@ Personal Discord bot
 - Python 3.6 and up - https://www.python.org/downloads/
 - git - https://git-scm.com/download/
 
+### How to install modules
+
+```
+for windows:
+python -m pip install -r requirements.txt
+
+for linux:
+python3 -m pip install -r requirements.txt
+```
+
+### Required Linux Packages
+
+Run shell script located in root directory:
+
+`./setup.sh -i`
+
+Required packages to make bot run efficiently:
+
+```
+python3-psutil
+python3-dbus
+ffmpeg
+
+```
+
 ### ENV
 
 rename `.env.example` to `.env` then store your token and some other private info like this:
