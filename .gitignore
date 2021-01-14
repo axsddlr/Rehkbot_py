@@ -3,6 +3,8 @@ config.py
 info.json
 headers.json
 graph.png
+config.ini
+lock.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

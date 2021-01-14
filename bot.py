@@ -9,8 +9,6 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-# os.system('python notifyLiveStreamer.py')
-
 
 def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
@@ -51,6 +49,8 @@ async def on_ready():
     my_twitch_url = "https://twitch.tv/rehkloos"
     await bot.change_presence(activity=discord.Streaming(name="Rehkloos", url=my_twitch_url))
     print('Bot connected.')
+    #launch twitchlive_notify after cogs
+    os.system('python ./twitchlive_notify/twitchlive.py')
 
 
 bot.run(TOKEN, bot=True, reconnect=True)
