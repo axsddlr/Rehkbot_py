@@ -27,11 +27,12 @@ def get_prefix(bot, message):
 
 bot = commands.Bot(command_prefix=get_prefix,
                    description='A Rewrite Cog Example')
+bot.remove_command('help')
 
 
 # This is what we're going to use to load the cogs on startup
 if __name__ == '__main__':
-    for filename in os.listdir("./cogs"):
+    for filename in os.listdir("cogs"):
         if filename.endswith(".py"):  # We only want to check through the python files
          try:  # I'd rather have this try/except block as I'd like it to load even if there is an issue with the cogs
             # This will load it
@@ -50,7 +51,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Streaming(name="Rehkloos", url=my_twitch_url))
     print('Bot connected.')
     #launch twitchlive_notify after cogs
-    os.system('python ./twitchlive_notify/twitchlive.py')
+    # os.system('python ./twitchlive_notify/twitchlive.py')
 
 
 bot.run(TOKEN, bot=True, reconnect=True)
