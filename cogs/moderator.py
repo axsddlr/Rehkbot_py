@@ -16,7 +16,10 @@ class ModeratorCog(commands.Cog, name='Moderator'):
 
 # clear /prune command
 
-    @commands.command(aliases=['prune'])
+    @commands.command(
+        name='purge',
+        hidden=True,
+    )
     @commands.has_permissions(ban_members=True, kick_members=True)
     async def clear(self, ctx, amount=None):
         if amount is None:
@@ -29,7 +32,9 @@ class ModeratorCog(commands.Cog, name='Moderator'):
 
 # MUTE MEMBERS
 
-    @commands.command(aliases=['m'])
+    @commands.command(
+        aliases=['m'],
+        hidden=True)
     @commands.has_permissions(kick_members=True)
     async def mute(self, ctx, member: discord.Member):
         muted_role = ctx.guild.get_role(bot_id)
@@ -39,7 +44,9 @@ class ModeratorCog(commands.Cog, name='Moderator'):
 
 # KICK MEMBERS
 
-    @commands.command(aliases=['k'])
+    @commands.command(
+        aliases=['k'],
+        hidden=True)
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason='no reason provided :/'):
         try:
@@ -50,7 +57,9 @@ class ModeratorCog(commands.Cog, name='Moderator'):
 
 # BAN MEMBERS
 
-    @commands.command(aliases=['b'])
+    @commands.command(
+        aliases=['b'],
+        hidden=True)
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason='no reason provided :/'):
         try:
@@ -61,7 +70,9 @@ class ModeratorCog(commands.Cog, name='Moderator'):
 
 # UNBAN MEMBERS
 
-    @commands.command(aliases=['ub'])
+    @commands.command(
+        aliases=['ub'],
+        hidden=True)
     @commands.has_permissions(ban_members=True)
     async def unban(self, ctx, *, member: discord.Member):
         banned_users = await ctx.guild.bans()
