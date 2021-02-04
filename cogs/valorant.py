@@ -23,12 +23,12 @@ def getValorantStats(Name, Tag):
     response = requests.get(URL)
     return response.json()
 
-class Valorant(commands.Cog):
+class Valorant(commands.Cog, name='Valorant'):
     def __init__(self, bot):
         self.bot = bot
 
     #  Valorant News
-    @commands.command(name="Valorant Updates",
+    @commands.command(name='Valorant News',
                       aliases=['valupdates'],
                       help='Displays Valorant Latest Patches')
     @commands.cooldown(2, 60, BucketType.user)
@@ -54,7 +54,7 @@ class Valorant(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(name="Valorant Rank ",
+    @commands.command(name='Valorant Rank',
                       aliases=['valrank'],
                       help='Displays Valorant Rank')
     # @commands.cooldown(2, 60, BucketType.user)
@@ -78,7 +78,7 @@ class Valorant(commands.Cog):
             message = responseJSON['message']
             await ctx.message.reply(message)
 
-    @commands.command(name="Valorant Stats ",
+    @commands.command(name='Valorant Stats',
                       aliases=['valstats'],
                       help='Displays General Valorant Stats')
     # @commands.cooldown(2, 60, BucketType.user)
