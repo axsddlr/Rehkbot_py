@@ -96,6 +96,14 @@ class Valorant(commands.Cog, name='Valorant'):
                 wins = responseJSON['stats']['wins']
                 winr = responseJSON['stats']['winpercentage']
                 TTP = responseJSON['stats']['playtime']['playtimepatched']
+                asst = responseJSON['stats']['assists']
+                matches = responseJSON['stats']['matches']
+                headshots = responseJSON['stats']['headshots']
+                headshotpercentage = responseJSON['stats']['headshotpercentage']
+                firstbloods = responseJSON['stats']['firstbloods']
+                aces = responseJSON['stats']['aces']
+                clutches = responseJSON['stats']['clutches']
+                flawless = responseJSON['stats']['flawless']
                 user = responseJSON['user']
                 url = "https://tracker.gg/valorant/profile/riot/" + Name + "%23" + Tag + "/overview"
 
@@ -107,12 +115,21 @@ class Valorant(commands.Cog, name='Valorant'):
                 )
                 file = discord.File("./assets/images/hex_valorant_logo.png", filename="hex_valorant_logo.png")
                 embed.set_thumbnail(url="attachment://hex_valorant_logo.png")
+                embed.add_field(name="Total Time Played", value=(TTP), inline=True)
                 embed.add_field(name=('Kills'), value=(kills), inline=True)
                 embed.add_field(name=("Deaths"), value=(deaths), inline=True)
                 embed.add_field(name="Wins", value=(wins), inline=True)
                 embed.add_field(name="Win %", value=(winr), inline=True)
                 embed.add_field(name="KDR", value=(kdr), inline=True)
-                embed.add_field(name="Total Time Played", value=(TTP), inline=True)
+                embed.add_field(name="Assists", value=(asst), inline=True)
+                embed.add_field(name="Matches", value=(matches), inline=True)
+                embed.add_field(name="Headshots", value=(headshots), inline=True)
+                embed.add_field(name="Headshots %", value=(headshotpercentage), inline=True)
+                embed.add_field(name="First Bloods", value=(firstbloods), inline=True)
+                embed.add_field(name="Aces", value=(aces), inline=True)
+                embed.add_field(name="Clutches", value=(clutches), inline=True)
+                embed.add_field(name="Flawless", value=(flawless), inline=True)
+                embed.add_field(name=" .", value=(". "), inline=True)
 
                 await ctx.send(file=file, embed=embed)
 
