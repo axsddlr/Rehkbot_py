@@ -12,8 +12,8 @@ def getValorantGameUpdates():
     return response.json()
 
 
-def getValorantRank(Name, Tag):
-    URL = "https://api.henrikdev.xyz/valorant/v1/mmr/na/" + Name + "/" + Tag
+def getValorantRank(Region, Name, Tag):
+    URL = "https://api.henrikdev.xyz/valorant/v1/mmr/" + Region + "/" + Name + "/" + Tag
     response = requests.get(URL)
     return response.json()
 
@@ -58,9 +58,9 @@ class Valorant(commands.Cog, name='Valorant'):
                       aliases=['valrank'],
                       help='Displays Valorant Rank')
     # @commands.cooldown(2, 60, BucketType.user)
-    async def valrank(self, ctx, Name: str = "", Tag: str = ""):
+    async def valrank(self, ctx, Region: str = "", Name: str = "", Tag: str = ""):
 
-        responseJSON = getValorantRank(Name, Tag)
+        responseJSON = getValorantRank(Region, Name, Tag)
 
         # Check if profile exists or is public
         status = responseJSON['status']
