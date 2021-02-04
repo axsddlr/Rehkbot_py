@@ -30,7 +30,7 @@ class Valorant(commands.Cog):
     #  Valorant News
     @commands.command(name="Valorant Updates",
                       aliases=['valupdates'],
-                      help='Valorant specific commands')
+                      help='Displays Valorant Latest Patches')
     @commands.cooldown(2, 60, BucketType.user)
     async def valupdates(self, ctx):
 
@@ -56,7 +56,7 @@ class Valorant(commands.Cog):
 
     @commands.command(name="Valorant Rank ",
                       aliases=['valrank'],
-                      help='Valorant specific commands')
+                      help='Displays Valorant Rank')
     # @commands.cooldown(2, 60, BucketType.user)
     async def valrank(self, ctx, Name: str = "", Tag: str = ""):
 
@@ -80,7 +80,7 @@ class Valorant(commands.Cog):
 
     @commands.command(name="Valorant Stats ",
                       aliases=['valstats'],
-                      help='Valorant specific commands')
+                      help='Displays General Valorant Stats')
     # @commands.cooldown(2, 60, BucketType.user)
     async def valstats(self, ctx, Name: str = "", Tag: str = ""):
 
@@ -96,8 +96,27 @@ class Valorant(commands.Cog):
                 wins = responseJSON['stats']['wins']
                 winr = responseJSON['stats']['winpercentage']
                 TTP = responseJSON['stats']['playtime']['playtimepatched']
+                user = responseJSON['user']
+                url = "https://tracker.gg/valorant/profile/riot/" + Name + "%23" + Tag + "/overview"
 
-                await ctx.message.reply("Total Time Played: " + str(TTP) + " | Wins: " + str(wins) + " | Win/Loss: " + str(winr) + " | Kills: " + str(kills) + " | KDR: " + str(kdr) + " | Deaths: " + str(deaths) + " (" + unquote(riotid) + ")")
+                embed = discord.Embed(
+                    title=user + "'s Stats",
+                    description=url,
+                    # crimson color code
+                    colour=(0xDC143C)
+                )
+                file = discord.File("./assets/images/hex_valorant_logo.png", filename="hex_valorant_logo.png")
+                embed.set_thumbnail(url="attachment://hex_valorant_logo.png")
+                embed.add_field(name=('Kills'), value=(kills), inline=True)
+                embed.add_field(name=("Deaths"), value=(deaths), inline=True)
+                embed.add_field(name="Wins", value=(wins), inline=True)
+                embed.add_field(name="Win %", value=(winr), inline=True)
+                embed.add_field(name="KDR", value=(kdr), inline=True)
+                embed.add_field(name="Total Time Played", value=(TTP), inline=True)
+
+                await ctx.send(file=file, embed=embed)
+
+
             #  If it does not exist or is private
             elif status == '451':
                 message = responseJSON['message']
