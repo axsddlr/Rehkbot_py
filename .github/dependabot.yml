@@ -9,3 +9,4 @@ updates:
       # Ignore updates to packages that start 'aws'
       # Wildcards match zero or more arbitrary characters
       - dependency-name: "aiohttp*"
+      - dependency-name: "urllib3*"

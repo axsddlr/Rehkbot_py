@@ -13,7 +13,7 @@ youtube_dl==2021.2.10
 timeago==1.0.15
 zc.lockfile >= 1.2.1
 configparser==5.0.1
-urllib3==1.26.26
+urllib3==1.26.3
 chardet==4.0.0
 psutil==5.8.0
 better-profanity==0.7.0
