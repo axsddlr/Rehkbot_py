@@ -50,7 +50,7 @@ async def on_ready():
     my_twitch_url = "https://twitch.tv/rehkloos"
     await bot.change_presence(activity=discord.Streaming(name="Rehkloos", url=my_twitch_url))
     print('Bot connected.')
-    bot.load_extension("twitter_feed.twitterfeed")
+    # bot.load_extension("twitter_feed.twitterfeed")
 
 
 bot.run(TOKEN, bot=True, reconnect=True)
