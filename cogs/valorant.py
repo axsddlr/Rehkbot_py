@@ -51,8 +51,10 @@ class Valorant(commands.Cog, name='Valorant'):
             colour=(0xDC143C)
         )
         embed.set_image(url=banner)
+        file = discord.File("./assets/images/valorant_sm.png", filename="valorant_sm.png")
+        embed.set_thumbnail(url="attachment://valorant_sm.png")
 
-        await ctx.send(embed=embed)
+        await ctx.send(file=file, embed=embed)
 
     @commands.command(name='Valorant Rank',
                       aliases=['valrank'],
@@ -77,6 +79,9 @@ class Valorant(commands.Cog, name='Valorant'):
         elif status == '404':
             message = responseJSON['message']
             await ctx.message.reply(message)
+        elif status == '459':
+            message = responseJSON['message']
+            await message.reply(message)
 
     @commands.command(name='Valorant Stats',
                       aliases=['valstats'],
@@ -113,8 +118,8 @@ class Valorant(commands.Cog, name='Valorant'):
                     # crimson color code
                     colour=(0xDC143C)
                 )
-                file = discord.File("./assets/images/hex_valorant_logo.png", filename="hex_valorant_logo.png")
-                embed.set_thumbnail(url="attachment://hex_valorant_logo.png")
+                file = discord.File("./assets/images/valorant_sm.png", filename="valorant_sm.png")
+                embed.set_thumbnail(url="attachment://valorant_sm.png")
                 embed.add_field(name="Total Time Played", value=(TTP), inline=True)
                 embed.add_field(name=('Kills'), value=(kills), inline=True)
                 embed.add_field(name=("Deaths"), value=(deaths), inline=True)
@@ -141,6 +146,9 @@ class Valorant(commands.Cog, name='Valorant'):
             elif status == '404':
                 message = responseJSON['message']
                 await ctx.message.reply(message)
+            elif status == '459':
+                message = responseJSON['message']
+                await message.reply(message)
 
 
 def setup(bot):
