@@ -1,10 +1,13 @@
 import discord
+import requests
 from discord.ext import commands
 import os
 
 import sys
 import traceback
 from dotenv import load_dotenv
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -23,6 +26,42 @@ def get_prefix(bot, message):
 
     # If we are in a guild, we allow for the user to mention us or use any of the prefixes in our list.
     return commands.when_mentioned_or(*prefixes)(bot, message)
+
+def getValorantGameUpdates():
+    URL = "https://api.henrikdev.xyz/valorant/v1/website/en-us?filter=game_updates"
+    response = requests.get(URL)
+    return response.json()
+
+async def valupdates():
+    await bot.wait_until_ready()
+
+    # patch-notes channel
+    c = bot.get_channel(512698020484087812)
+
+
+    banner = ""
+    title = ""
+    url = ""
+    responseJSON = getValorantGameUpdates()
+
+    # JSON Results Mapping
+    banner = responseJSON['data'][0]['banner_url']
+    title = responseJSON['data'][0]['title']
+    url = responseJSON['data'][0]['url']
+
+    embed = discord.Embed(
+        title=title,
+        description=url,
+        # crimson color code
+        colour=(0xDC143C)
+    )
+    embed.set_image(url=banner)
+    file = discord.File("./assets/images/valorant_sm.png", filename="valorant_sm.png")
+    embed.set_thumbnail(url="attachment://valorant_sm.png")
+
+    await c.send(file=file, embed=embed)
+
+
 
 
 bot = commands.Bot(command_prefix=get_prefix,
@@ -51,6 +90,14 @@ async def on_ready():
     await bot.change_presence(activity=discord.Streaming(name="Rehkloos", url=my_twitch_url))
     print('Bot connected.')
     # bot.load_extension("twitter_feed.twitterfeed")
+    scheduler = AsyncIOScheduler()
+
+    # checks for new patch every Tuesday at 1pm EST
+    scheduler.add_job(valupdates, CronTrigger(day_of_week='tues', hour="13", timezone='US/Eastern'))
+
+    #starting the scheduler
+    scheduler.start()
+
 
 
 bot.run(TOKEN, bot=True, reconnect=True)
