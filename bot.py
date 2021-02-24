@@ -93,7 +93,7 @@ async def on_ready():
     scheduler = AsyncIOScheduler()
 
     # checks for new patch every Tuesday at 1pm EST
-    scheduler.add_job(valupdates, CronTrigger(day_of_week='tues', hour="13", timezone='US/Eastern'))
+    scheduler.add_job(valupdates, CronTrigger(day_of_week='tue', hour="13", timezone='US/Eastern'))
 
     #starting the scheduler
     scheduler.start()
