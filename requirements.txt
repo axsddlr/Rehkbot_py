@@ -3,7 +3,7 @@ aiohttp==3.6.3
 discord.py==1.6.0
 discord==1.0.1
 PyNaCl==1.4.0
-google-api-python-client==1.12.8
+google-api-python-client==2.0.2
 random2==1.0.1
 utils==1.0.1
 python-dotenv==0.15.0
