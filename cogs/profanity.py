@@ -1,6 +1,7 @@
 from asyncio import sleep
 from datetime import datetime, timedelta
 from typing import Optional
+from re import search
 
 from better_profanity import profanity
 from discord import Embed, Member
@@ -15,7 +16,9 @@ profanity.load_censor_words_from_file("./assets/bad_words.txt")
 class Profanity(Cog, name='Profanity'):
 	def __init__(self, bot):
 		self.bot = bot
-
+		self.url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+		# links text channel ID
+  		self.links_allowed = (817593711054815252,)
 
 	@command(
      name="addprofanity",
@@ -50,6 +53,10 @@ class Profanity(Cog, name='Profanity'):
 			if profanity.contains_profanity(message.content):
 				await message.delete()
 				await message.channel.send("You can't use that word here.")
+
+			elif message.channel.id not in self.links_allowed and search(self.url_regex, message.content):
+				await message.delete()
+				await message.channel.send("You can't send links in this channel.", delete_after=10)
 
 
 def setup(bot):
