@@ -24,7 +24,7 @@ from discord.ext.commands import command
 #format bestaudio/best or worstaudio
 ytdl_format_options = {
     'audioquality': 8,
-    'format': 'worstaudio',
+    'format': 'bestaudio',
     'outtmpl': '{}',
     'restrictfilenames': True,
     'noplaylist': True,
@@ -182,7 +182,7 @@ class MusicPlayer(commands.Cog, name='Music'):
     async def playlist(self, data, msg):
         """
         THIS FUNCTION IS FOR WHEN YOUTUBE LINK IS A PLAYLIST
-        Add song into the server's playlist inside the self.player dict 
+        Add song into the server's playlist inside the self.player dict
         """
         for i in data['queue']:
             self.player[msg.guild.id]['queue'].append(

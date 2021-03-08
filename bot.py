@@ -88,8 +88,7 @@ async def on_ready():
     # Twitch URL
     my_twitch_url = "https://twitch.tv/rehkloos"
     await bot.change_presence(activity=discord.Streaming(name="Rehkloos", url=my_twitch_url))
-    print('Bot connected.')
-    # bot.load_extension("twitter_feed.twitterfeed")
+    print('Bot connected')
     scheduler = AsyncIOScheduler()
 
     # checks for new patch every Tuesday at 1pm EST
