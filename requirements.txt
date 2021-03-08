@@ -18,4 +18,5 @@ better-profanity==0.7.0
 tweepy==3.10.0
 discord-webhook==0.12.0
 APScheduler==3.7.0
-
+Discord-Anti-Spam==0.6.4
+python-Levenshtein==0.12.2
