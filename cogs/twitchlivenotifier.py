@@ -1,19 +1,27 @@
-
 import time
 import sys
 import os
-import configparser
-
 import requests
 import zc.lockfile
+import typing
+import functools
 
 from dotenv import load_dotenv
+from asyncio import sleep
+from datetime import datetime, timedelta
+from typing import Optional
+from discord import Embed, Member
+from discord.ext.commands import Cog
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 C_ID = os.getenv('TWITCH_CLIENT_ID')
 C_SEC = os.getenv('TWITCH_CLIENT_SECRET')
 WBH_URL = os.getenv('WEBHOOK_URL')
+STREAMER = os.getenv('STREAMER')
+ImagePriority = os.getenv('Image_Priority')
+LIVE_MSG = os.getenv('Message')
+DESC = os.getenv('Description')
 
 twitch_client_id = ''
 twitch_secret_key = ''
@@ -27,27 +35,11 @@ discord_message = ''
 discord_description = ''
 lock = None
 
-# convert seconds to mins
-
-
-def sleep_minutes(minutes):
-    time.sleep(minutes * 60)
-
 
 def config():
-    config_file = configparser.ConfigParser()
-    config_file.read('config.ini')
-
-    try:
-        twitch_config = config_file['Twitch']
-    except KeyError:
-        print('[Twitch] section not found in config file. Please set values for [Twitch] in config.ini')
-        print('Take a look at config_example.ini for how config.ini should look.')
-        sys.exit()
-
     global twitch_user
     try:
-        twitch_user = twitch_config['User']
+        twitch_user = STREAMER
     except KeyError:
         print(
             'User not found in Twitch section of config file. Please set User under [Twitch] in config.ini')
@@ -56,7 +48,7 @@ def config():
 
     global image_priority
     try:
-        image_priority = twitch_config['ImagePriority']
+        image_priority = ImagePriority
     except KeyError:
         print('ImagePriority not found in Twitch section of config file. '
               'Please set ImagePriority under [Twitch] in config.ini')
@@ -90,13 +82,6 @@ def config():
     global stream_url
     stream_url = "https://www.twitch.tv/" + twitch_user.lower()
 
-    try:
-        discord_config = config_file['Discord']
-    except KeyError:
-        print('[Discord] section not found in config file. Please set values for [Discord] in config.ini')
-        print('Take a look at config_example.ini for how config.ini should look.')
-        sys.exit()
-
     global discord_url
     try:
         discord_url = WBH_URL
@@ -108,7 +93,7 @@ def config():
 
     global discord_message
     try:
-        discord_message = discord_config['Message']
+        discord_message = LIVE_MSG
     except KeyError:
         print(
             'Message not found in Discord section of config file. Please set Message under [Discord] in config.ini')
@@ -118,7 +103,7 @@ def config():
 
     global discord_description
     try:
-        discord_description = discord_config['Description']
+        discord_description = DESC
     except KeyError:
         print('Description not found in Discord section of config file. Please set Description under [Discord]' +
               ' in config.ini')
@@ -147,6 +132,10 @@ def authorize():
     global twitch_app_token_json
     twitch_app_token_json = app_token_request.json()
 
+async def run_blocking(self, blocking_func: typing.Callable, *args, **kwargs) -> typing.Any:
+	"""Runs a blocking function in a non-blocking way"""
+	func = functools.partial(blocking_func, *args, **kwargs) # `run_in_executor` doesn't support kwargs, `functools.partial` does
+	return await self.bot.loop.run_in_executor(None, func)
 
 def main():
     twitch_json = {'data': []}
@@ -226,7 +215,7 @@ def main():
                 user_response = user_request.json()
 
             user_logo = None
-            print(str(user_response))
+            # print(str(user_response))
             if len(user_response['data']) == 1:
                 user_data = user_response['data'][0]
                 user_logo_temp = user_data['profile_image_url']
@@ -286,11 +275,20 @@ def main():
                     time.sleep(5)
         else:
             print("Stream is not live. Waiting 7 minutes to retry...")
-            sleep_minutes(7)
+            time.sleep(5)
 
 
-if __name__ == "__main__":
-    config()
-    get_lock()
-    authorize()
-    main()
+
+class TLN(Cog, name='TwitchLive'):
+	def __init__(self, bot):
+		self.bot = bot
+
+	async def on_ready(self):
+		config()
+		get_lock()
+		authorize()
+		main()
+
+
+def setup(bot):
+	bot.add_cog(TLN(bot))
