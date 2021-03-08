@@ -21,6 +21,6 @@ class Links(Cog):
                     await message.delete()
                     await message.channel.send('No links allowed in this channel!', delete_after=10)
                 else:
-                    print(f'A message was allowed in {message.channel.name}')
+                    return
 def setup(bot):
     bot.add_cog(Links(bot))
