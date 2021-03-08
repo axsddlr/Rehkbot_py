@@ -39,21 +39,18 @@ rename `.env.example` to `.env` then store your token and some other private inf
 ```
 DISCORD_TOKEN =
 DISCORD_BOT_ID =
+```
+
+### .ENV (for Twitch Live Notifier)
+
+In your `.env` fill in this info:
+
+```
+STREAMER=
+Image_Priority=Game
 TWITCH_CLIENT_ID =
 TWITCH_CLIENT_SECRET =
 WEBHOOK_URL =
-```
-
-### CONFIG.ini (for twitchlive_notify)
-
-rename `config_example.ini` to `config.ini` then store your token and some other private info like this:
-
-```
-[Twitch]
-User =
-ImagePriority = Game
-
-[Discord]
 Message =
 Description =
 
