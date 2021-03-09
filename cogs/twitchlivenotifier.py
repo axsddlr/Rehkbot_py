@@ -3,8 +3,6 @@ import sys
 import os
 import requests
 import zc.lockfile
-import typing
-import functools
 
 from dotenv import load_dotenv
 from asyncio import sleep
@@ -34,7 +32,6 @@ discord_url = ''
 discord_message = ''
 discord_description = ''
 lock = None
-
 
 def config():
     global twitch_user
@@ -132,10 +129,6 @@ def authorize():
     global twitch_app_token_json
     twitch_app_token_json = app_token_request.json()
 
-async def run_blocking(self, blocking_func: typing.Callable, *args, **kwargs) -> typing.Any:
-	"""Runs a blocking function in a non-blocking way"""
-	func = functools.partial(blocking_func, *args, **kwargs) # `run_in_executor` doesn't support kwargs, `functools.partial` does
-	return await self.bot.loop.run_in_executor(None, func)
 
 def main():
     twitch_json = {'data': []}
@@ -274,15 +267,15 @@ def main():
                     print("Failed to call Discord API. Waiting 5 seconds to retry...")
                     time.sleep(5)
         else:
-            print("Stream is not live. Waiting 7 minutes to retry...")
+            # print("Stream is not live. Waiting 7 minutes to retry...")
             time.sleep(5)
-
 
 
 class TLN(Cog, name='TwitchLive'):
 	def __init__(self, bot):
 		self.bot = bot
 
+	@Cog.listener()
 	async def on_ready(self):
 		config()
 		get_lock()
