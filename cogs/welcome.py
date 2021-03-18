@@ -4,11 +4,13 @@ import sys
 import psutil
 import os
 import datetime
+from dotenv import load_dotenv
 from discord.ext import commands
 from discord.ext.commands import Cog
 
-WELCOME_CHANNEL_ID = 362861909218689024
-LEAVE_CHANNEL_ID = 362861909218689024
+load_dotenv()
+WELCOME_CHANNEL_ID = os.getenv('WELCOME')
+LEAVE_CHANNEL_ID = os.getenv('WELCOME')
 
 class Streaming(Cog, name='Streaming'):
     def __init__(self, bot):
