@@ -11,6 +11,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+PATCHES = os.getenv('PATCH_CHANNEL')
 
 
 def get_prefix(bot, message):
@@ -32,11 +33,33 @@ def getValorantGameUpdates():
     response = requests.get(URL)
     return response.json()
 
+def getSpikeUpdates():
+    URL = "https://vlrscrape.herokuapp.com/thespike/news"
+    response = requests.get(URL)
+    return response.json()
+
+async def spikeupdates():
+    await bot.wait_until_ready()
+
+    # patch-notes channel
+    c = bot.get_channel(PATCHES)
+
+
+    banner = ""
+    title = ""
+    url = ""
+    responseJSON = getSpikeUpdates()
+
+    # JSON Results Mapping
+    url = responseJSON[0]['url']
+
+    await c.send(url)
+
 async def valupdates():
     await bot.wait_until_ready()
 
     # patch-notes channel
-    c = bot.get_channel(512698020484087812)
+    c = bot.get_channel(PATCHES)
 
 
     banner = ""
@@ -93,6 +116,7 @@ async def on_ready():
 
     # checks for new patch every Tuesday at 1pm EST
     scheduler.add_job(valupdates, CronTrigger(day_of_week='tue', hour="13", timezone='US/Eastern'))
+    # scheduler.add_job(spikeupdates, 'interval', seconds=90)
 
     #starting the scheduler
     scheduler.start()
