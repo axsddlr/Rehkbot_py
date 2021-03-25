@@ -1,17 +1,16 @@
 import discord
 import requests
-from discord.ext import commands
 import os
-
 import sys
 import traceback
+import filecmp
+from discord.ext import commands
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-PATCHES = os.getenv('PATCH_CHANNEL')
 
 
 def get_prefix(bot, message):
@@ -34,32 +33,52 @@ def getValorantGameUpdates():
     return response.json()
 
 def getSpikeUpdates():
-    URL = "https://vlrscrape.herokuapp.com/thespike/news"
+    URL = "https://spikegg-scrape.herokuapp.com/latest_news"
     response = requests.get(URL)
     return response.json()
 
-async def spikeupdates():
+
+async def spike_monitor():
     await bot.wait_until_ready()
 
-    # patch-notes channel
-    c = bot.get_channel(PATCHES)
-
-
-    banner = ""
-    title = ""
-    url = ""
+    file1 = "spike_old_hash.txt"
+    # Path of second file
+    file2 = "spike_new_hash.txt"
     responseJSON = getSpikeUpdates()
 
+    title = responseJSON['today'][0]['title']
+    url = responseJSON['today'][0]['url_path']
+    full_url = "https://thespike.gg" + url
     # JSON Results Mapping
-    url = responseJSON[0]['url']
+    monitor = open("spike_new_hash.txt", "w")
+    print(title, file=monitor)
 
-    await c.send(url)
+    f = open("spike_old_hash.txt", "w")
+    print(title, file=f)
+
+    # time.sleep(25)
+
+    comparison = filecmp.cmp(file1, file2, shallow=False)
+    # print(comparison)
+
+    if comparison == True:
+        print("the same")
+    elif comparison == False:
+        c = bot.get_channel(824453152526565427)
+        # JSON Results Mapping
+        await c.send(full_url)
+        # f = open("spike_old_hash.txt", "w")
+        print(title, file=f)
+
+
+
+
 
 async def valupdates():
     await bot.wait_until_ready()
 
     # patch-notes channel
-    c = bot.get_channel(PATCHES)
+    c = bot.get_channel(512698020484087812)
 
 
     banner = ""
@@ -116,7 +135,7 @@ async def on_ready():
 
     # checks for new patch every Tuesday at 1pm EST
     scheduler.add_job(valupdates, CronTrigger(day_of_week='tue', hour="13", timezone='US/Eastern'))
-    # scheduler.add_job(spikeupdates, 'interval', seconds=90)
+    scheduler.add_job(spike_monitor, 'interval', seconds=15)
 
     #starting the scheduler
     scheduler.start()
