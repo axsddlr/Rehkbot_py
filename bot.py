@@ -135,7 +135,7 @@ async def on_ready():
 
     # checks for new patch every Tuesday at 1pm EST
     scheduler.add_job(valupdates, CronTrigger(day_of_week='tue', hour="13", timezone='US/Eastern'))
-    scheduler.add_job(spike_monitor, 'interval', seconds=15)
+    scheduler.add_job(spike_monitor, 'interval', seconds=3600)
 
     #starting the scheduler
     scheduler.start()
