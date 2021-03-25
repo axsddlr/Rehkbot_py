@@ -128,8 +128,8 @@ if __name__ == '__main__':
 @bot.event
 async def on_ready():
     # Twitch URL
-    my_twitch_url = "https://twitch.tv/rehkloos"
-    await bot.change_presence(activity=discord.Streaming(name="Rehkloos", url=my_twitch_url))
+    my_twitch_url = "https://twitch.tv/rehhk"
+    await bot.change_presence(activity=discord.Streaming(name="Rehhk", url=my_twitch_url))
     print('Bot connected')
     scheduler = AsyncIOScheduler()
 
