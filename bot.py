@@ -4,6 +4,7 @@ import os
 import sys
 import traceback
 import filecmp
+import simplejson as json
 from discord.ext import commands
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -37,41 +38,46 @@ def getSpikeUpdates():
     response = requests.get(URL)
     return response.json()
 
+def updater(d, inval, outval):
+    for k, v in d.items():
+        if isinstance(v, dict):
+            updater(d[k], inval, outval)
+        else:
+            if v == "":
+                d[k] = None
+    return d
+
 
 async def spike_monitor():
     await bot.wait_until_ready()
 
-    file1 = "spike_old_hash.txt"
-    # Path of second file
-    file2 = "spike_new_hash.txt"
+    saved_json = "spike_old.json"
+    # call API
     responseJSON = getSpikeUpdates()
-
     title = responseJSON['today'][0]['title']
     url = responseJSON['today'][0]['url_path']
     full_url = "https://thespike.gg" + url
-    # JSON Results Mapping
-    monitor = open("spike_new_hash.txt", "w")
-    print(title, file=monitor)
 
-    f = open("spike_old_hash.txt", "w")
-    print(title, file=f)
+    # open saved_json and check title string
+    f = open(saved_json,)
+    data = json.load(f)
+    res = updater(data, "", None)
+    check_file_json = res['today'][0]['title']
 
-    # time.sleep(25)
-
-    comparison = filecmp.cmp(file1, file2, shallow=False)
-    # print(comparison)
-
-    if comparison == True:
-        print("the same")
-    elif comparison == False:
+    #compare title string from file to title string from api then overwrite file
+    if check_file_json == title:
+        # print("True")
+        return
+    elif check_file_json != title:
+        # print("False")
+        #send to news channel in discord
         c = bot.get_channel(824453152526565427)
         # JSON Results Mapping
         await c.send(full_url)
-        # f = open("spike_old_hash.txt", "w")
-        print(title, file=f)
+        f = open(saved_json, "w")
+        print(json.dumps(responseJSON), file=f)
 
-
-
+    f.close()
 
 
 async def valupdates():
