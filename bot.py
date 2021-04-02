@@ -9,9 +9,12 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
+from utils.discord_webhook import Webhook
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+spike_webhook = os.getenv('spike_webhook_url')
+
 
 
 def get_prefix(bot, message):
@@ -71,9 +74,11 @@ async def spike_monitor():
     elif check_file_json != title:
         # print("False")
         #send to news channel in discord
-        c = bot.get_channel(824453152526565427)
+        #c = bot.get_channel(824453152526565427)
         # JSON Results Mapping
-        await c.send(full_url)
+        # await c.send(full_url)
+        hook = Webhook(spike_webhook)
+        hook.send(full_url)
         f = open(saved_json, "w")
         print(json.dumps(responseJSON), file=f)
 
