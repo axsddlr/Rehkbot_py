@@ -14,6 +14,7 @@ from utils.discord_webhook import Webhook
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 spike_webhook = os.getenv('spike_webhook_url')
+patches_webhook = os.getenv('patches_webhook_url')
 
 
 
@@ -89,7 +90,8 @@ async def valupdates():
     await bot.wait_until_ready()
 
     # patch-notes channel
-    c = bot.get_channel(512698020484087812)
+    # c = bot.get_channel(512698020484087812)
+    saved_json = "valo_patch_old.json"
 
 
     banner = ""
@@ -102,17 +104,40 @@ async def valupdates():
     title = responseJSON['data'][0]['title']
     url = responseJSON['data'][0]['url']
 
-    embed = discord.Embed(
-        title=title,
-        description=url,
-        # crimson color code
-        colour=(0xDC143C)
-    )
-    embed.set_image(url=banner)
-    file = discord.File("./assets/images/valorant_sm.png", filename="valorant_sm.png")
-    embed.set_thumbnail(url="attachment://valorant_sm.png")
+    #open saved_json file
+    f = open(saved_json,)
+    data = json.load(f)
+    res = updater(data, "", None)
+    check_file_json = res['data'][0]['title']
 
-    await c.send(file=file, embed=embed)
+        #compare title string from file to title string from api then overwrite file
+    if check_file_json == title:
+        # print("True")
+        return
+    elif check_file_json != title:
+        # print("False")
+        #send to news channel in discord
+        #c = bot.get_channel(824453152526565427)
+        # JSON Results Mapping
+        # await c.send(full_url)
+        hook = Webhook(patches_webhook)
+        hook.send(url)
+        f = open(saved_json, "w")
+        print(json.dumps(responseJSON), file=f)
+
+    f.close()
+
+    # embed = discord.Embed(
+    #     title=title,
+    #     description=url,
+    #     # crimson color code
+    #     colour=(0xDC143C)
+    # )
+    # embed.set_image(url=banner)
+    # file = discord.File("./assets/images/valorant_sm.png", filename="valorant_sm.png")
+    # embed.set_thumbnail(url="attachment://valorant_sm.png")
+
+    # await c.send(file=file, embed=embed)
 
 
 
@@ -145,7 +170,8 @@ async def on_ready():
     scheduler = AsyncIOScheduler()
 
     # checks for new patch every Tuesday at 1pm EST
-    scheduler.add_job(valupdates, CronTrigger(day_of_week='tue', hour="13", timezone='US/Eastern'))
+    # scheduler.add_job(valupdates, CronTrigger(day_of_week='tue', hour="13", timezone='US/Eastern'))
+    scheduler.add_job(valupdates, 'interval', seconds=10)
     scheduler.add_job(spike_monitor, 'interval', seconds=900)
 
     #starting the scheduler
