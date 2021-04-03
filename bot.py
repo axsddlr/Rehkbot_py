@@ -90,13 +90,7 @@ async def valupdates():
     await bot.wait_until_ready()
 
     # patch-notes channel
-    # c = bot.get_channel(512698020484087812)
     saved_json = "valo_patch_old.json"
-
-
-    banner = ""
-    title = ""
-    url = ""
     responseJSON = getValorantGameUpdates()
 
     # JSON Results Mapping
@@ -126,18 +120,6 @@ async def valupdates():
         print(json.dumps(responseJSON), file=f)
 
     f.close()
-
-    # embed = discord.Embed(
-    #     title=title,
-    #     description=url,
-    #     # crimson color code
-    #     colour=(0xDC143C)
-    # )
-    # embed.set_image(url=banner)
-    # file = discord.File("./assets/images/valorant_sm.png", filename="valorant_sm.png")
-    # embed.set_thumbnail(url="attachment://valorant_sm.png")
-
-    # await c.send(file=file, embed=embed)
 
 
 
@@ -171,7 +153,7 @@ async def on_ready():
 
     # checks for new patch every Tuesday at 1pm EST
     # scheduler.add_job(valupdates, CronTrigger(day_of_week='tue', hour="13", timezone='US/Eastern'))
-    scheduler.add_job(valupdates, 'interval', seconds=10)
+    scheduler.add_job(valupdates, 'interval', seconds=3600)
     scheduler.add_job(spike_monitor, 'interval', seconds=900)
 
     #starting the scheduler
