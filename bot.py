@@ -3,19 +3,32 @@ import requests
 import os
 import sys
 import traceback
-import filecmp
 import simplejson as json
+import time
 from discord.ext import commands
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from utils.discord_webhook import Webhook
+from utils.discord_webhook import Webhook, Embed
 
 load_dotenv()
+scheduler = AsyncIOScheduler()
+
+
 TOKEN = os.getenv('DISCORD_TOKEN')
 spike_webhook = os.getenv('spike_webhook_url')
 patches_webhook = os.getenv('patches_webhook_url')
+TCI = os.getenv('TWITCH_CLIENT_ID')
+TCS = os.getenv('TWITCH_CLIENT_SECRET')
+STREAMER_NAME = os.getenv('STREAMER')
 
+URL = 'https://api.twitch.tv/helix/streams?user_login=' + f"{STREAMER_NAME}"
+authURL = 'https://id.twitch.tv/oauth2/token'
+
+AutParams = {'client_id': TCI,
+             'client_secret': TCS,
+             'grant_type': 'client_credentials'
+             }
 
 
 def get_prefix(bot, message):
@@ -32,15 +45,31 @@ def get_prefix(bot, message):
     # If we are in a guild, we allow for the user to mention us or use any of the prefixes in our list.
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
+
+def twitch_request():
+    AutCall = requests.post(url=authURL, params=AutParams)
+    access_token = AutCall.json()['access_token']
+
+    head = {
+        'Client-ID': TCI,
+        'Authorization':  "Bearer " + access_token
+    }
+
+    response = requests.get(URL, headers=head)
+    return response.json()
+
+
 def getValorantGameUpdates():
     URL = "https://api.henrikdev.xyz/valorant/v1/website/en-us?filter=game_updates"
     response = requests.get(URL)
     return response.json()
 
+
 def getSpikeUpdates():
     URL = "https://spikegg-scrape.herokuapp.com/latest_news"
     response = requests.get(URL)
     return response.json()
+
 
 def updater(d, inval, outval):
     for k, v in d.items():
@@ -62,6 +91,7 @@ async def spike_monitor():
     url = responseJSON['today'][0]['url_path']
     full_url = "https://thespike.gg" + url
 
+    time.sleep(5)
     # open saved_json and check title string
     f = open(saved_json,)
     data = json.load(f)
@@ -104,7 +134,7 @@ async def valupdates():
     res = updater(data, "", None)
     check_file_json = res['data'][0]['title']
 
-        #compare title string from file to title string from api then overwrite file
+    #compare title string from file to title string from api then overwrite file
     if check_file_json == title:
         # print("True")
         return
@@ -120,8 +150,6 @@ async def valupdates():
         print(json.dumps(responseJSON), file=f)
 
     f.close()
-
-
 
 
 bot = commands.Bot(command_prefix=get_prefix,
@@ -146,19 +174,18 @@ if __name__ == '__main__':
 @bot.event
 async def on_ready():
     # Twitch URL
-    my_twitch_url = "https://twitch.tv/rehhk"
+    my_twitch_url = "https://twitch.tv/" + f"{STREAMER_NAME}"
     await bot.change_presence(activity=discord.Streaming(name="Rehhk", url=my_twitch_url))
     print('Bot connected')
-    scheduler = AsyncIOScheduler()
 
     # checks for new patch every Tuesday at 1pm EST
     # scheduler.add_job(valupdates, CronTrigger(day_of_week='tue', hour="13", timezone='US/Eastern'))
     scheduler.add_job(valupdates, 'interval', seconds=3600)
-    scheduler.add_job(spike_monitor, 'interval', seconds=900)
+    scheduler.add_job(spike_monitor, 'interval', seconds=1800)
 
     #starting the scheduler
+    time.sleep(5)
     scheduler.start()
-
 
 
 bot.run(TOKEN, bot=True, reconnect=True)
