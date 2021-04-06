@@ -3,7 +3,7 @@ import requests
 import os
 import sys
 import traceback
-import simplejson as json
+import ujson as json
 import time
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -12,7 +12,7 @@ from apscheduler.triggers.cron import CronTrigger
 from utils.discord_webhook import Webhook, Embed
 
 load_dotenv()
-scheduler = AsyncIOScheduler()
+scheduler = AsyncIOScheduler(job_defaults={'misfire_grace_time': 900})
 
 
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -184,7 +184,6 @@ async def on_ready():
     scheduler.add_job(spike_monitor, 'interval', seconds=1800)
 
     #starting the scheduler
-    time.sleep(5)
     scheduler.start()
 
 
