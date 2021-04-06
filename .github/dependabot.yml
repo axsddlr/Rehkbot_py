@@ -10,3 +10,4 @@ updates:
       # Wildcards match zero or more arbitrary characters
       - dependency-name: "aiohttp*"
       - dependency-name: "urllib3*"
+      - dependency-name: "matplotlib"
