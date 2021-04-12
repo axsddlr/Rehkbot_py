@@ -4,13 +4,8 @@ import sys
 import psutil
 import os
 import datetime
-from dotenv import load_dotenv
 from discord.ext import commands
 from discord.ext.commands import Cog
-
-load_dotenv()
-WELCOME_CHANNEL_ID = os.getenv("WELCOME")
-LEAVE_CHANNEL_ID = os.getenv("WELCOME")
 
 
 class Streaming(Cog, name="Streaming"):
@@ -20,7 +15,7 @@ class Streaming(Cog, name="Streaming"):
     @Cog.listener()
     async def on_member_join(self, member):
         try:
-            channel = bot.get_channel(WELCOME_CHANNEL_ID)
+            channel = bot.get_channel(638233816028151818)
             try:
                 embed = discord.Embed(colour=discord.Colour.green())
                 embed.set_author(name=member.name, icon_url=member.avatar_url)
@@ -39,7 +34,7 @@ class Streaming(Cog, name="Streaming"):
     @Cog.listener()
     async def on_member_remove(self, member):
         try:
-            channel = bot.get_channel(LEAVE_CHANNEL_ID)
+            channel = bot.get_channel(638233816028151818)
             try:
                 embed = discord.Embed(colour=discord.Colour.red())
                 embed.set_author(name=member.name, icon_url=member.avatar_url)
