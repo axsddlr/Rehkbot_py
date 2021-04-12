@@ -6,18 +6,17 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
-bot_id = os.getenv('DISCORD_BOT_ID')
+bot_id = os.getenv("DISCORD_BOT_ID")
 
 
-class ModeratorCog(commands.Cog, name='Moderator'):
+class ModeratorCog(commands.Cog, name="Moderator"):
     def __init__(self, bot):
         self.bot = bot
 
-
-# clear /prune command
+    # clear /prune command
 
     @commands.command(
-        name='purge',
+        name="purge",
         hidden=True,
     )
     @commands.has_permissions(ban_members=True, kick_members=True)
@@ -29,64 +28,62 @@ class ModeratorCog(commands.Cog, name='Moderator'):
         else:
             await ctx.channel.purge(limit=int(amount))
 
+    # MUTE MEMBERS
 
-# MUTE MEMBERS
-
-    @commands.command(
-        aliases=['m'],
-        hidden=True)
+    @commands.command(aliases=["m"], hidden=True)
     @commands.has_permissions(kick_members=True)
     async def mute(self, ctx, member: discord.Member):
         muted_role = ctx.guild.get_role(bot_id)
 
         await member.add_roles(muted_role)
-        await ctx.send(f'{ member.mention } has been muted')
+        await ctx.send(f"{ member.mention } has been muted")
 
-# KICK MEMBERS
+    # KICK MEMBERS
 
-    @commands.command(
-        aliases=['k'],
-        hidden=True)
+    @commands.command(aliases=["k"], hidden=True)
     @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, member: discord.Member, *, reason='no reason provided :/'):
+    async def kick(
+        self, ctx, member: discord.Member, *, reason="no reason provided :/"
+    ):
         try:
-            await member.send(f'{ member.name } has been kicked from this community, because { reason }')
+            await member.send(
+                f"{ member.name } has been kicked from this community, because { reason }"
+            )
         except:
-            await ctx.send(f'oops! it seems like { member.name } has closed their dms')
+            await ctx.send(f"oops! it seems like { member.name } has closed their dms")
             await member.kick(reason=reason)
 
-# BAN MEMBERS
+    # BAN MEMBERS
 
-    @commands.command(
-        aliases=['b'],
-        hidden=True)
+    @commands.command(aliases=["b"], hidden=True)
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member: discord.Member, *, reason='no reason provided :/'):
+    async def ban(self, ctx, member: discord.Member, *, reason="no reason provided :/"):
         try:
-            await member.send(f'{ member.name } has been banned from this community, because { reason }')
+            await member.send(
+                f"{ member.name } has been banned from this community, because { reason }"
+            )
         except:
-            await ctx.send(f'oops! it seems like { member.name } has closed their dms')
+            await ctx.send(f"oops! it seems like { member.name } has closed their dms")
             await member.ban(reason=reason)
 
-# UNBAN MEMBERS
+    # UNBAN MEMBERS
 
-    @commands.command(
-        aliases=['ub'],
-        hidden=True)
+    @commands.command(aliases=["ub"], hidden=True)
     @commands.has_permissions(ban_members=True)
     async def unban(self, ctx, *, member: discord.Member):
         banned_users = await ctx.guild.bans()
-        member_name, member_disc = member.split('#')
+        member_name, member_disc = member.split("#")
 
         for banned_entry in banned_users:
             user = banned_entry.user
 
         if (user.name, user.discrimiator) == (member_name, member_disc):
             await ctx.guild.unban(user)
-            await ctx.send(f'{ member_name } has been unbanned!')
+            await ctx.send(f"{ member_name } has been unbanned!")
             return
 
         await ctx.send(f"{ member } wasn't found :(")
+
 
 # The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case MembersCog.
 # When we load the cog, we use the name of the file.

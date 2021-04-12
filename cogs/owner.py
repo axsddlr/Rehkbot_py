@@ -7,9 +7,7 @@ class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(
-        name="load",
-        hidden=True)
+    @commands.command(name="load", hidden=True)
     @commands.is_owner()
     async def load(self, ctx, *, cog: str):
         try:
@@ -19,9 +17,7 @@ class Owner(commands.Cog):
         else:
             await ctx.send("**`SUCCESS`**")
 
-    @commands.command(
-        name="unload",
-        hidden=True)
+    @commands.command(name="unload", hidden=True)
     @commands.is_owner()
     async def unload(self, ctx, *, cog: str):
         print(cog)
@@ -32,9 +28,7 @@ class Owner(commands.Cog):
         else:
             await ctx.send("**`SUCCESS`**")
 
-    @commands.command(
-        name="reload",
-        hidden=True)
+    @commands.command(name="reload", hidden=True)
     @commands.is_owner()
     async def reload(self, ctx, *, cog: str):
         try:
@@ -45,14 +39,10 @@ class Owner(commands.Cog):
         else:
             await ctx.send("**`SUCCESS`**")
 
-    @commands.command(
-        name="shards",
-        hidden=True)
+    @commands.command(name="shards", hidden=True)
     @commands.is_owner()
     async def getShards(self, ctx):
         await ctx.send("Shards: " + str(self.bot.shard_count))
-
-
 
 
 def setup(bot):

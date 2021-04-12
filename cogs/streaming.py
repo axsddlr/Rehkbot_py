@@ -7,7 +7,8 @@ import datetime
 from discord.ext import commands
 from discord.ext.commands import Cog
 
-class Streaming(Cog, name='Streaming'):
+
+class Streaming(Cog, name="Streaming"):
     def __init__(self, bot):
         self.bot = bot
 
@@ -32,5 +33,6 @@ class Streaming(Cog, name='Streaming'):
                 print(f"{after.display_name} has started streaming")
                 await after.add_roles(streaming_role)
 
+
 def setup(bot):
-    	bot.add_cog(Streaming(bot))
+    bot.add_cog(Streaming(bot))

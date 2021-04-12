@@ -14,6 +14,7 @@ warn_embed_dict = {
     ],
 }
 
+
 class AntiSpamCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -22,6 +23,7 @@ class AntiSpamCog(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         await self.bot.handler.propagate(message)
+
 
 def setup(bot):
     bot.add_cog(AntiSpamCog(bot))

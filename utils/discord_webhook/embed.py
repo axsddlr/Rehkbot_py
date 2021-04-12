@@ -22,34 +22,41 @@ class Embed:
     \*\*timestamp: str, optional
         ``ISO 8601`` timestamp of the embed. If set to a "now",
         the current time is set as the timestamp.
-        
+
     \*\*color: int (or hex), optional
         Color of the embed.
-        
+
     \*\*image_url: str, optional
         URL of the image.
-        
+
     \*\*thumbnail_url: str, optional
         URL of the thumbnail.
-        
+
     """  # noqa: W605
 
     __slots__ = (
-        'color', 'title', 'url', 'author',
-        'description', 'fields', 'image',
-        'thumbnail', 'footer', 'timestamp',
+        "color",
+        "title",
+        "url",
+        "author",
+        "description",
+        "fields",
+        "image",
+        "thumbnail",
+        "footer",
+        "timestamp",
     )
 
     def __init__(self, **kwargs):
         """
         Initialises an Embed object.
         """
-        self.color = kwargs.get('color')
-        self.title = kwargs.get('title')
-        self.url = kwargs.get('url')
-        self.description = kwargs.get('description')
+        self.color = kwargs.get("color")
+        self.title = kwargs.get("title")
+        self.url = kwargs.get("url")
+        self.description = kwargs.get("description")
 
-        self.timestamp = kwargs.get('timestamp')
+        self.timestamp = kwargs.get("timestamp")
         if self.timestamp == "now":  # sets the timestamp to the current time
             self.timestamp = str(datetime.datetime.utcnow())
 
@@ -95,8 +102,9 @@ class Embed:
         self.title = title
         self.url = url
 
-    def set_timestamp(self, time: Union[str, datetime.datetime] = None,
-                      now: bool = False) -> None:
+    def set_timestamp(
+        self, time: Union[str, datetime.datetime] = None, now: bool = False
+    ) -> None:
         """
         Sets the timestamp of the embed.
 
@@ -132,15 +140,10 @@ class Embed:
             Whether or not the embed should be inline.
 
         """
-        field = {
-            'name': name,
-            'value': value,
-            'inline': inline
-        }
+        field = {"name": name, "value": value, "inline": inline}
         self.fields.append(field)
 
-    def set_author(self, name: str, icon_url: str = None, url: str = None) -> \
-            None:
+    def set_author(self, name: str, icon_url: str = None, url: str = None) -> None:
         """
         Sets the author of the embed.
 
@@ -156,11 +159,7 @@ class Embed:
             URL hyperlink for the author.
 
         """
-        self.author = {
-            'name': name,
-            'icon_url': icon_url,
-            'url': url
-        }
+        self.author = {"name": name, "icon_url": icon_url, "url": url}
 
     def set_thumbnail(self, url: str) -> None:
         """
@@ -172,7 +171,7 @@ class Embed:
             URL of the thumbnail.
 
         """
-        self.thumbnail = {'url': url}
+        self.thumbnail = {"url": url}
 
     def set_image(self, url: str) -> None:
         """
@@ -184,7 +183,7 @@ class Embed:
             URL of the image.
 
         """
-        self.image = {'url': url}
+        self.image = {"url": url}
 
     def set_footer(self, text: str, icon_url: str = None) -> None:
         """
@@ -199,10 +198,7 @@ class Embed:
             URL for the icon in the footer.
 
         """
-        self.footer = {
-            'text': text,
-            'icon_url': icon_url
-        }
+        self.footer = {"text": text, "icon_url": icon_url}
 
     def to_dict(self) -> dict:
         """

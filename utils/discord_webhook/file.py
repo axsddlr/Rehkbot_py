@@ -17,15 +17,15 @@ class File:
 
     """
 
-    def __init__(self, fp: Union[BinaryIO, str], name: str = ''):
+    def __init__(self, fp: Union[BinaryIO, str], name: str = ""):
         if isinstance(fp, str):
-            self.fp = open(fp, 'rb')
+            self.fp = open(fp, "rb")
             self._manual_opened = True
             self.name = name if name else fp
         else:
             self.fp = fp
             self._manual_opened = False
-            self.name = name if name else getattr(fp, 'name', 'filename')
+            self.name = name if name else getattr(fp, "name", "filename")
         self._close = self.fp.close
         self.fp.close = lambda: None  # prevent aiohttp from closing the file
 
