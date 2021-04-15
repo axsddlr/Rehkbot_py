@@ -9,6 +9,7 @@ from apscheduler.triggers.cron import CronTrigger
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 from utils.discord_webhook import Webhook, Embed
+from utils.functions import exists
 
 load_dotenv()
 patches_webhook = os.getenv("patches_webhook_url")
@@ -46,6 +47,11 @@ class Game_Updates(commands.Cog, name="Game Updates"):
         banner = responseJSON["data"][0]["banner_url"]
         title = responseJSON["data"][0]["title"]
         url = responseJSON["data"][0]["url"]
+
+        # check if file exists
+        exists(saved_json)
+
+        time.sleep(5)
 
         # open saved_json file
         f = open(

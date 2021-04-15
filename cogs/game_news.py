@@ -9,6 +9,7 @@ from apscheduler.triggers.cron import CronTrigger
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 from utils.discord_webhook import Webhook, Embed
+from utils.functions import exists
 
 load_dotenv()
 spike_webhook = os.getenv("spike_webhook_url")
@@ -39,12 +40,16 @@ class Game_News(commands.Cog, name="Game News"):
         await self.bot.wait_until_ready()
 
         saved_json = "spike_old.json"
+
         # call API
         responseJSON = getSpikeUpdates()
 
         title = responseJSON["today"][0]["title"]
         url = responseJSON["today"][0]["url_path"]
         full_url = "https://thespike.gg" + url
+
+        # check if file exists
+        exists(saved_json)
 
         time.sleep(5)
         # open saved_json and check title string
@@ -70,6 +75,7 @@ class Game_News(commands.Cog, name="Game News"):
 
     @commands.Cog.listener()
     async def on_ready(self):
+
         scheduler = self.scheduler
 
         # add job for scheduler
