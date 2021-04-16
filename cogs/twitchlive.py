@@ -35,7 +35,7 @@ def twitch_request():
 class TwitchLive(commands.Cog, name="Twitch Live"):
     def __init__(self, bot):
         self.bot = bot
-        self.scheduler = AsyncIOScheduler(job_defaults={"misfire_grace_time": 5})
+        self.scheduler = AsyncIOScheduler(job_defaults={"misfire_grace_time": 210})
 
     async def is_live(self):
         await self.bot.wait_until_ready()
@@ -88,7 +88,7 @@ class TwitchLive(commands.Cog, name="Twitch Live"):
         scheduler = self.scheduler
 
         # add job for scheduler
-        scheduler.add_job(self.is_live, "interval", seconds=10)  # TESTING
+        scheduler.add_job(self.is_live, "interval", seconds=420)
 
         # starting the scheduler
         scheduler.start()
