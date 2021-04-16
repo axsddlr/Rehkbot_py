@@ -3,19 +3,17 @@ import requests
 import os
 import ujson as json
 import time
+import sys
+import traceback
 from discord.ext import commands
 from dotenv import load_dotenv
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
-TCI = os.getenv("TWITCH_CLIENT_ID")
-TCS = os.getenv("TWITCH_CLIENT_SECRET")
 STREAMER_NAME = os.getenv("STREAMER")
 
-URL = "https://api.twitch.tv/helix/streams?user_login=" + f"{STREAMER_NAME}"
-authURL = "https://id.twitch.tv/oauth2/token"
-
-AutParams = {"client_id": TCI, "client_secret": TCS, "grant_type": "client_credentials"}
+scheduler = AsyncIOScheduler(job_defaults={"misfire_grace_time": 900})
 
 
 def get_prefix(bot, message):
@@ -31,16 +29,6 @@ def get_prefix(bot, message):
 
     # If we are in a guild, we allow for the user to mention us or use any of the prefixes in our list.
     return commands.when_mentioned_or(*prefixes)(bot, message)
-
-
-def twitch_request():
-    AutCall = requests.post(url=authURL, params=AutParams)
-    access_token = AutCall.json()["access_token"]
-
-    head = {"Client-ID": TCI, "Authorization": "Bearer " + access_token}
-
-    response = requests.get(URL, headers=head)
-    return response.json()
 
 
 bot = commands.Bot(command_prefix=get_prefix, description="A Rewrite Cog Example")
@@ -61,6 +49,22 @@ if __name__ == "__main__":
                 continue
 
 
+initial_ext = ["cogs.twitchlive"]
+
+
+async def reload():
+    # bot.unload_extension("cogs.twitchlive")
+    # bot.load_extension("cogs.twitchlive")
+    print("done")
+    for extension in initial_ext:
+        try:
+            bot.unload_extension(extension)
+            bot.load_extension(extension)
+        except Exception as e:
+            print(f"Failed to load the {extension}", file=sys.stderr)
+            traceback.print_exc()
+
+
 @bot.event
 async def on_ready():
     # Twitch URL
@@ -69,6 +73,11 @@ async def on_ready():
         activity=discord.Streaming(name="Rehhk", url=my_twitch_url)
     )
     print("Bot connected")
+
+    scheduler.add_job(reload, "interval", seconds=43200)
+
+    # starting the scheduler
+    scheduler.start()
 
 
 bot.run(TOKEN, bot=True, reconnect=True)
