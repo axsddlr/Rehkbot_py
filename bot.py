@@ -8,6 +8,7 @@ import traceback
 from discord.ext import commands
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -55,11 +56,11 @@ initial_ext = ["cogs.twitchlive"]
 async def reload():
     # bot.unload_extension("cogs.twitchlive")
     # bot.load_extension("cogs.twitchlive")
-    print("done")
     for extension in initial_ext:
         try:
             bot.unload_extension(extension)
             bot.load_extension(extension)
+            print("done")
         except Exception as e:
             print(f"Failed to load the {extension}", file=sys.stderr)
             traceback.print_exc()
@@ -74,7 +75,10 @@ async def on_ready():
     )
     print("Bot connected")
 
-    scheduler.add_job(reload, "interval", seconds=43200)
+    scheduler.add_job(
+        reload, CronTrigger(day_of_week="mon-sun", hour="21", timezone="US/Eastern")
+    )
+    # scheduler.add_job(reload, "interval", seconds=43200)
 
     # starting the scheduler
     scheduler.start()
