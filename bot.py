@@ -54,12 +54,11 @@ initial_ext = ["cogs.twitchlive"]
 
 
 async def reload():
-    # bot.unload_extension("cogs.twitchlive")
-    # bot.load_extension("cogs.twitchlive")
     for extension in initial_ext:
         try:
-            bot.unload_extension(extension)
-            bot.load_extension(extension)
+            # bot.unload_extension(extension)
+            # bot.load_extension(extension)
+            bot.reload_extension(extension)
             print("done")
         except Exception as e:
             print(f"Failed to load the {extension}", file=sys.stderr)
