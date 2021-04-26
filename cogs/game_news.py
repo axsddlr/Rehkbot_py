@@ -16,7 +16,7 @@ spike_webhook = os.getenv("spike_webhook_url")
 
 
 def getSpikeUpdates():
-    URL = "https://spikegg-scrape.herokuapp.com/latest_news"
+    URL = "https://api.rehkloos.com/spikegg/latest_news"
     response = requests.get(URL)
     return response.json()
 

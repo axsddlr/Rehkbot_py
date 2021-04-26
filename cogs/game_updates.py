@@ -24,13 +24,13 @@ def getValorantGameUpdates():
 
 
 def getLOLGameUpdates():
-    URL = "https://lol-scraper.herokuapp.com/lol/patch_notes"
+    URL = "https://api.rehkloos.com/lol/patch_notes"
     response = requests.get(URL)
     return response.json()
 
 
 def getTFTGameUpdates():
-    URL = "https://lol-scraper.herokuapp.com/tft/patch_notes"
+    URL = "https://api.rehkloos.com/tft/patch_notes"
     response = requests.get(URL)
     return response.json()
 
