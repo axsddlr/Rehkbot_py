@@ -5,6 +5,7 @@ import ujson as json
 import time
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 from discord.ext import commands
 from utils.discord_webhook import Webhook, Embed
 
@@ -88,7 +89,10 @@ class TwitchLive(commands.Cog, name="Twitch Live"):
         scheduler = self.scheduler
 
         # add job for scheduler
-        scheduler.add_job(self.is_live, "interval", seconds=420)
+        scheduler.add_job(self.is_live, "interval", seconds=420, id="live")
+        scheduler.resume_job(
+            "live", CronTrigger(day_of_week="mon-sun", hour="21", timezone="US/Eastern")
+        )
 
         # starting the scheduler
         scheduler.start()
