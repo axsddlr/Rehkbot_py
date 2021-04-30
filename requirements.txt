@@ -1,7 +1,7 @@
 aiohttp==3.6.3
 discord.py==1.7.1
 discord==1.0.1
-python-dotenv==0.17.0
+python-dotenv==0.17.1
 requests>= 2.18.4
 youtube_dl==2021.4.26
 timeago==1.0.15
