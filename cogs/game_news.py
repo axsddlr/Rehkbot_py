@@ -21,6 +21,12 @@ def getSpikeUpdates():
     return response.json()
 
 
+def getVLRUpdates():
+    URL = "https://api.rehkloos.com/vlr/latest_news"
+    response = requests.get(URL)
+    return response.json()
+
+
 def updater(d, inval, outval):
     for k, v in d.items():
         if isinstance(v, dict):
@@ -73,6 +79,43 @@ class Game_News(commands.Cog, name="Game News"):
 
         f.close()
 
+    async def vlr_monitor(self):
+        await self.bot.wait_until_ready()
+
+        saved_json = "vlr_old.json"
+
+        # call API
+        responseJSON = getVLRUpdates()
+
+        title = responseJSON["data"]["segments"][0]["title"]
+        url = responseJSON["data"]["segments"][0]["url_path"]
+        full_url = "https://www.vlr.gg" + url
+
+        # check if file exists
+        exists(saved_json)
+
+        time.sleep(5)
+        # open saved_json and check title string
+        f = open(
+            saved_json,
+        )
+        data = json.load(f)
+        res = updater(data, "", None)
+        check_file_json = res["data"]["segments"][0]["title"]
+
+        # compare title string from file to title string from api then overwrite file
+        if check_file_json == title:
+            # print("True")
+            return
+        elif check_file_json != title:
+            # print("False")
+            hook = Webhook(spike_webhook)
+            hook.send(full_url)
+            f = open(saved_json, "w")
+            print(json.dumps(responseJSON), file=f)
+
+        f.close()
+
     @commands.Cog.listener()
     async def on_ready(self):
 
@@ -80,6 +123,7 @@ class Game_News(commands.Cog, name="Game News"):
 
         # add job for scheduler
         scheduler.add_job(self.spike_monitor, "interval", seconds=1800)
+        scheduler.add_job(self.vlr_monitor, "interval", seconds=1830)
 
         # starting the scheduler
         scheduler.start()
