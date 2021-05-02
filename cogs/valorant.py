@@ -1,7 +1,5 @@
 import discord
 import requests
-from datetime import datetime
-from urllib.parse import unquote
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 

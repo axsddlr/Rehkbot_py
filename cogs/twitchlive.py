@@ -1,8 +1,5 @@
-import discord
-import requests
 import os
-import ujson as json
-import time
+import requests
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger

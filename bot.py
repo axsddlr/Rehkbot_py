@@ -1,10 +1,5 @@
-import discord
-import requests
 import os
-import ujson as json
-import time
-import sys
-import traceback
+import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
@@ -29,7 +24,7 @@ def get_prefix(bot, message):
         # Only allow ? to be used in DMs
         return "?"
 
-    # If we are in a guild, we allow for the user to mention us or use any of the prefixes in our list.
+    # allow for the user to mention us or use any of the prefixes in our list.
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
 
@@ -40,8 +35,8 @@ bot.remove_command("help")
 # This is what we're going to use to load the cogs on startup
 if __name__ == "__main__":
     for filename in os.listdir("cogs"):
-        if filename.endswith(".py"):  # We only want to check through the python files
-            try:  # I'd rather have this try/except block as I'd like it to load even if there is an issue with the cogs
+        if filename.endswith(".py"):
+            try:
                 # This will load it
                 bot.load_extension("cogs.{0}".format(filename[:-3]))
                 # this is to let us know which cogs got loaded

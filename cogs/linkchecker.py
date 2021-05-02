@@ -1,10 +1,5 @@
-from datetime import datetime, timedelta
 from re import search
-
-from discord import Embed, Member
 from discord.ext.commands import Cog
-from discord.ext.commands import CheckFailure
-from discord.ext.commands import command, has_permissions, bot_has_permissions
 
 
 class Links(Cog):
