@@ -18,7 +18,7 @@ crimson = 0xDC143C
 
 
 def getValorantGameUpdates():
-    URL = "https://api.henrikdev.xyz/valorant/v1/website/en-us?filter=game_updates"
+    URL = "https://api.rehkloos.com/valorant/news/en-us/game-updates"
     response = requests.get(URL)
     return response.json()
 
@@ -58,9 +58,16 @@ class Game_Updates(commands.Cog, name="Game Updates"):
         responseJSON = getValorantGameUpdates()
 
         # JSON Results Mapping
-        banner = responseJSON["data"][0]["banner_url"]
-        title = responseJSON["data"][0]["title"]
-        url = responseJSON["data"][0]["url"]
+        banner = responseJSON["data"]["segments"]["thumbnail_url"]
+        title = responseJSON["data"]["segments"]["title"]
+        description = responseJSON["data"]["segments"]["description"]
+        url = responseJSON["data"]["segments"]["url_path"]
+        external_link = responseJSON["data"]["segments"]["external_link"]
+
+        if external_link == "":
+            full_url = "https://playvalorant.com/en-us" + url
+        else:
+            full_url = external_link
 
         # check if file exists
         exists(saved_json)
@@ -73,7 +80,7 @@ class Game_Updates(commands.Cog, name="Game Updates"):
         )
         data = json.load(f)
         res = updater(data, "", None)
-        check_file_json = res["data"][0]["title"]
+        check_file_json = res["data"]["segments"]["title"]
 
         # compare title string from file to title string from api then overwrite file
         if check_file_json == title:
@@ -82,7 +89,21 @@ class Game_Updates(commands.Cog, name="Game Updates"):
         elif check_file_json != title:
             # print("False")
             hook = Webhook(patches_webhook)
-            hook.send(url)
+            # hook.send(full_url)
+            # f = open(saved_json, "w")
+            # print(json.dumps(responseJSON), file=f)
+
+            embed = Embed(
+                title="VALORANT",
+                description=f"[{title}]({full_url})\n\n{description}",
+                color=crimson,
+                timestamp="now",  # sets the timestamp to current time
+            )
+            embed.set_footer(text="Rehkbot")
+            embed.set_image(url=banner)
+
+            hook.send(embed=embed)
+
             f = open(saved_json, "w")
             print(json.dumps(responseJSON), file=f)
 
