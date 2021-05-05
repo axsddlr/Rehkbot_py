@@ -123,7 +123,7 @@ class Game_News(commands.Cog, name="Game News"):
 
         # add job for scheduler
         scheduler.add_job(self.spike_monitor, "interval", seconds=1800)
-        scheduler.add_job(self.vlr_monitor, "interval", seconds=1830)
+        # scheduler.add_job(self.vlr_monitor, "interval", seconds=1830)
 
         # starting the scheduler
         scheduler.start()
