@@ -197,7 +197,7 @@ class Game_Updates(commands.Cog, name="Game Updates"):
 
         # compare title string from file to title string from api then overwrite file
         if tag != "teamfight_tactics_patch_notes":
-            print("not patch notes")
+            # print("not patch notes")
             return
         elif tag == "teamfight_tactics_patch_notes":
             # print("False")
