@@ -8,5 +8,5 @@ def exists(s):
         # print("File exist")
     else:
         f = open(s, "w+")
-        f.write(" ")
+        f.write("")
         f.close()

@@ -1,19 +1,39 @@
 import os
+import time
 import requests
 import ujson as json
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext import commands
-from utils.discord_webhook import Webhook, Embed
+from utils.discord_webhook import Webhook, Embed, File
+from utils.functions import exists
 
 load_dotenv()
 reddit_webhook = os.getenv("reddit_webhook_url")
+crimson = 0xDC143C
 
 
 def getVALREDUpdates():
-    URL = "https://www.reddit.com/r/Valorant/new/.json"
-    response = requests.get(URL)
+    headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Max-Age": "3600",
+        "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0",
+    }
+    URL = "https://api.rehkloos.com/reddit/Valorant"
+    response = requests.get(URL, headers=headers)
     return response.json()
+
+
+def updater(d, inval, outval):
+    for k, v in d.items():
+        if isinstance(v, dict):
+            updater(d[k], inval, outval)
+        else:
+            if v == "":
+                d[k] = None
+    return d
 
 
 class Reddit_News(commands.Cog, name="Reddit News"):
@@ -25,31 +45,42 @@ class Reddit_News(commands.Cog, name="Reddit News"):
         await self.bot.wait_until_ready()
 
         # call API
+        # patch-notes channel
+        saved_json = "reddit_old.json"
         responseJSON = getVALREDUpdates()
 
-        basetree = responseJSON["data"]["children"][0]["data"]
+        basetree = responseJSON["data"]["segments"][0]
 
         title = basetree["title"]
-        subreddit = basetree["subreddit"]
-        thumbnail = basetree["thumbnail"]
-        url_path = basetree["permalink"]
-        # video = basetree["secure_media"]["reddit_video"]["fallback_url"]
-        video_url = basetree["url"]
+        thumbnail = basetree["thumbnail_url"]
+        url_path = basetree["url_path"]
         author = basetree["author"]
         # description = basetree["selftext"]
-        flair = basetree["link_flair_text"]
-        full_url = "https://www.reddit.com" + url
+        flair = basetree["flair"]
+        full_url = "https://www.reddit.com" + url_path
 
-        if flair != "Educational":
+        # check if file exists
+        exists(saved_json)
+
+        time.sleep(5)
+        # open saved_json and check title string
+        f = open(
+            saved_json,
+        )
+        data = json.load(f)
+        res = updater(data, "", None)
+        check_file_json = res["data"]["segments"][0]["title"]
+
+        if (flair != "Educational") and (check_file_json == title):
             # print("not patch notes")
             return
-        elif flair == "Educational":
+        elif (flair == "Educational") and (check_file_json != title):
             # print("False")
             hook = Webhook(reddit_webhook)
 
             embed = Embed(
                 title="VALORANT REDDIT",
-                description=f"[{title}]({url})\n\n{author}",
+                description=f"[{title}]({full_url})\n\n author: {author}",
                 color=crimson,
                 timestamp="now",  # sets the timestamp to current time
             )
@@ -59,6 +90,10 @@ class Reddit_News(commands.Cog, name="Reddit News"):
             embed.set_thumbnail(url="attachment://val_reddit.png")
 
             hook.send(embed=embed, file=file)
+            f = open(saved_json, "w")
+            print(json.dumps(responseJSON), file=f)
+
+        f.close()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -66,7 +101,7 @@ class Reddit_News(commands.Cog, name="Reddit News"):
         scheduler = self.scheduler
 
         # add job for scheduler
-        scheduler.add_job(self.reddit_monitor, "interval", seconds=1800)
+        scheduler.add_job(self.reddit_monitor, "interval", seconds=900)
 
         # starting the scheduler
         scheduler.start()
