@@ -181,6 +181,7 @@ class Game_Updates(commands.Cog, name="Game Updates"):
         description = responseJSON["data"]["segments"][0]["description"]
         url = responseJSON["data"]["segments"][0]["url_path"]
         tag = responseJSON["data"]["segments"][0]["tag"]
+        full_url = "https://teamfighttactics.leagueoflegends.com/en-us" + url
 
         # check if file exists
         exists(saved_json)
@@ -196,16 +197,16 @@ class Game_Updates(commands.Cog, name="Game Updates"):
         check_file_json = res["data"]["segments"][0]["title"]
 
         # compare title string from file to title string from api then overwrite file
-        if tag != "teamfight_tactics_patch_notes":
+        if (check_file_json == title) and (tag != "teamfight_tactics_patch_notes"):
             # print("not patch notes")
             return
-        elif tag == "teamfight_tactics_patch_notes":
+        elif (check_file_json != title) and (tag == "teamfight_tactics_patch_notes"):
             # print("False")
             hook = Webhook(patches_webhook)
 
             embed = Embed(
                 title="Teamfight Tactics",
-                description=f"[{title}]({url})\n\n{description}",
+                description=f"[{title}]({full_url})\n\n{description}",
                 color=crimson,
                 timestamp="now",  # sets the timestamp to current time
             )
