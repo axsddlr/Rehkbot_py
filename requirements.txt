@@ -3,7 +3,7 @@ discord.py==1.7.2
 discord==1.0.1
 python-dotenv==0.17.1
 requests>= 2.18.4
-youtube_dl==2021.4.26
+youtube_dl==2021.5.16
 timeago==1.0.15
 urllib3==1.26.3
 chardet<=4.0
