@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext import commands
 from utils.discord_webhook import Webhook, Embed, File
-from utils.functions import exists
+from utils.global_utils import exists
 
 load_dotenv()
 reddit_webhook = os.getenv("reddit_webhook_url")

@@ -1,16 +1,12 @@
-import discord
-import requests
 import os
-import ujson as json
 import time
-import re
+import ujson as json
+import requests
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.cron import CronTrigger
 from discord.ext import commands
-from discord.ext.commands.cooldowns import BucketType
 from utils.discord_webhook import Webhook, Embed, File
-from utils.functions import exists
+from utils.global_utils import exists
 
 load_dotenv()
 patches_webhook = os.getenv("patches_webhook_url")
@@ -89,9 +85,6 @@ class Game_Updates(commands.Cog, name="Game Updates"):
         elif check_file_json != title:
             # print("False")
             hook = Webhook(patches_webhook)
-            # hook.send(full_url)
-            # f = open(saved_json, "w")
-            # print(json.dumps(responseJSON), file=f)
 
             embed = Embed(
                 title="VALORANT",
@@ -215,11 +208,7 @@ class Game_Updates(commands.Cog, name="Game Updates"):
             file = File("./assets/images/tft_logo.png", name="tft_logo.png")
             embed.set_thumbnail(url="attachment://tft_logo.png")
 
-            # if tag == "teamfight_tactics_patch_notes":
             hook.send(embed=embed, file=file)
-            # else:
-            #     f = open(saved_json, "w")
-            #     print(json.dumps(responseJSON), file=f)
 
             f = open(saved_json, "w")
             print(json.dumps(responseJSON), file=f)
