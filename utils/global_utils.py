@@ -9,4 +9,4 @@ def exists(s):
         # print("File exist")
     else:
         source = "./assets/empty.json"
-        dest = shutil.copy(source, s)
+        shutil.copy(source, s)
