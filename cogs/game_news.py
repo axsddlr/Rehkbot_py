@@ -8,11 +8,12 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
-from utils.discord_webhook import Webhook, Embed
-from utils.functions import exists
+from utils.discord_webhook import Webhook, Embed, File
+from utils.global_utils import exists
 
 load_dotenv()
 spike_webhook = os.getenv("spike_webhook_url")
+crimson = 0xDC143C
 
 
 def getSpikeUpdates():
@@ -88,6 +89,8 @@ class Game_News(commands.Cog, name="Game News"):
         responseJSON = getVLRUpdates()
 
         title = responseJSON["data"]["segments"][0]["title"]
+        description = responseJSON["data"]["segments"][0]["description"]
+        author = responseJSON["data"]["segments"][0]["author"]
         url = responseJSON["data"]["segments"][0]["url_path"]
         full_url = "https://www.vlr.gg" + url
 
@@ -111,6 +114,7 @@ class Game_News(commands.Cog, name="Game News"):
             # print("False")
             hook = Webhook(spike_webhook)
             hook.send(full_url)
+
             f = open(saved_json, "w")
             print(json.dumps(responseJSON), file=f)
 
@@ -123,7 +127,7 @@ class Game_News(commands.Cog, name="Game News"):
 
         # add job for scheduler
         scheduler.add_job(self.spike_monitor, "interval", seconds=1800)
-        # scheduler.add_job(self.vlr_monitor, "interval", seconds=1830)
+        scheduler.add_job(self.vlr_monitor, "interval", seconds=1800)
 
         # starting the scheduler
         scheduler.start()
