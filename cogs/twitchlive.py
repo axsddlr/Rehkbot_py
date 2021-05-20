@@ -87,9 +87,9 @@ class TwitchLive(commands.Cog, name="Twitch Live"):
 
         # add job for scheduler
         scheduler.add_job(self.is_live, "interval", seconds=420, id="live")
-        scheduler.resume_job(
+        scheduler.get_job(
             "live", CronTrigger(day_of_week="mon-sun", hour="21", timezone="US/Eastern")
-        )
+        ).resume()
 
         # starting the scheduler
         scheduler.start()
