@@ -1,4 +1,5 @@
 import pathlib
+import shutil
 
 
 def exists(s):
@@ -7,6 +8,5 @@ def exists(s):
         return
         # print("File exist")
     else:
-        f = open(s, "w+")
-        f.write("")
-        f.close()
+        source = "./assets/empty.json"
+        dest = shutil.copy(source, s)
