@@ -30,7 +30,7 @@ def getVLRUpdates():
 
 
 def getVLRMatches():
-    URL = "https://vlrggapi.herokuapp.com/match/results"
+    URL = "https://api.rehkloos.com/vlr/match/results"
     response = requests.get(URL)
     return response.json()
 
