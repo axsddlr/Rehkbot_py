@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext import commands
 from utils.discord_webhook import Webhook, Embed, File
-from utils.global_utils import exists
+from utils.global_utils import news_exists, matches_exists
 
 load_dotenv()
 patches_webhook = os.getenv("patches_webhook_url")
@@ -66,7 +66,7 @@ class Game_Updates(commands.Cog, name="Game Updates"):
             full_url = external_link
 
         # check if file exists
-        exists(saved_json)
+        news_exists(saved_json)
 
         time.sleep(5)
 

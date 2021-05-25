@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext import commands
 from utils.discord_webhook import Webhook, Embed, File
-from utils.global_utils import exists
+from utils.global_utils import news_exists, matches_exists
 
 load_dotenv()
 reddit_webhook = os.getenv("reddit_webhook_url")
@@ -60,7 +60,7 @@ class Reddit_News(commands.Cog, name="Reddit News"):
         full_url = "https://www.reddit.com" + url_path
 
         # check if file exists
-        exists(saved_json)
+        news_exists(saved_json)
 
         time.sleep(5)
         # open saved_json and check title string
