@@ -102,7 +102,7 @@ class Game_News(commands.Cog, name="Game News"):
         full_url = "https://www.vlr.gg" + url
 
         # check if file exists
-        exists(saved_json)
+        news_exists(saved_json)
 
         time.sleep(5)
         # open saved_json and check title string
