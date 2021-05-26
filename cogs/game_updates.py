@@ -120,7 +120,7 @@ class Game_Updates(commands.Cog, name="Game Updates"):
         url = responseJSON["data"]["segments"][0]["url"]
 
         # check if file exists
-        exists(saved_json)
+        news_exists(saved_json)
 
         time.sleep(5)
 
@@ -177,7 +177,7 @@ class Game_Updates(commands.Cog, name="Game Updates"):
         full_url = "https://teamfighttactics.leagueoflegends.com/en-us" + url
 
         # check if file exists
-        exists(saved_json)
+        news_exists(saved_json)
 
         time.sleep(5)
 
