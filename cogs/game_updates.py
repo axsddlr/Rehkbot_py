@@ -190,10 +190,10 @@ class Game_Updates(commands.Cog, name="Game Updates"):
         check_file_json = res["data"]["segments"][0]["title"]
 
         # compare title string from file to title string from api then overwrite file
-        if (check_file_json == title) and (tag != "teamfight_tactics_patch_notes"):
+        if check_file_json == title:
             # print("not patch notes")
             return
-        elif (check_file_json != title) and (tag == "teamfight_tactics_patch_notes"):
+        elif check_file_json != title:
             # print("False")
             hook = Webhook(patches_webhook)
 
