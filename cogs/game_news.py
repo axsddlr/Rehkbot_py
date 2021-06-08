@@ -24,7 +24,7 @@ def getSpikeUpdates():
 
 
 def getVLRUpdates():
-    URL = "https://api.rehkloos.com/vlr/latest_news"
+    URL = "https://api.rehkloos.com/vlr/news"
     response = requests.get(URL)
     return response.json()
 
