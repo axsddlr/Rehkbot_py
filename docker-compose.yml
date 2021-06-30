@@ -4,3 +4,5 @@ services:
   bot:
     container_name: "rehkbot"
     build: .
+    env_file:
+      - .env
