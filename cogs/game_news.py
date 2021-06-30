@@ -50,42 +50,42 @@ class Game_News(commands.Cog, name="Game News"):
         self.bot = bot
         self.scheduler = AsyncIOScheduler(job_defaults={"misfire_grace_time": 900})
 
-    async def spike_monitor(self):
-        await self.bot.wait_until_ready()
+    # async def spike_monitor(self):
+    #     await self.bot.wait_until_ready()
 
-        saved_json = "spike_old.json"
+    #     saved_json = "spike_old.json"
 
-        # call API
-        responseJSON = getSpikeUpdates()
+    #     # call API
+    #     responseJSON = getSpikeUpdates()
 
-        title = responseJSON["today"][0]["title"]
-        url = responseJSON["today"][0]["url_path"]
-        full_url = "https://thespike.gg" + url
+    #     title = responseJSON["today"][0]["title"]
+    #     url = responseJSON["today"][0]["url_path"]
+    #     full_url = "https://thespike.gg" + url
 
-        # check if file exists
-        exists(saved_json)
+    #     # check if file exists
+    #     exists(saved_json)
 
-        time.sleep(5)
-        # open saved_json and check title string
-        f = open(
-            saved_json,
-        )
-        data = json.load(f)
-        res = updater(data, "", None)
-        check_file_json = res["today"][0]["title"]
+    #     time.sleep(5)
+    #     # open saved_json and check title string
+    #     f = open(
+    #         saved_json,
+    #     )
+    #     data = json.load(f)
+    #     res = updater(data, "", None)
+    #     check_file_json = res["today"][0]["title"]
 
-        # compare title string from file to title string from api then overwrite file
-        if check_file_json == title:
-            # print("True")
-            return
-        elif check_file_json != title:
-            # print("False")
-            hook = Webhook(spike_webhook)
-            hook.send(full_url)
-            f = open(saved_json, "w")
-            print(json.dumps(responseJSON), file=f)
+    #     # compare title string from file to title string from api then overwrite file
+    #     if check_file_json == title:
+    #         # print("True")
+    #         return
+    #     elif check_file_json != title:
+    #         # print("False")
+    #         hook = Webhook(spike_webhook)
+    #         hook.send(full_url)
+    #         f = open(saved_json, "w")
+    #         print(json.dumps(responseJSON), file=f)
 
-        f.close()
+    #     f.close()
 
     async def vlr_news_monitor(self):
         await self.bot.wait_until_ready()
