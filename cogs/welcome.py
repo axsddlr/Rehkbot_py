@@ -15,7 +15,7 @@ class Streaming(Cog, name="Streaming"):
     @Cog.listener()
     async def on_member_join(self, member):
         try:
-            channel = bot.get_channel(638233816028151818)
+            channel = self.bot.get_channel(638233816028151818)
             try:
                 embed = discord.Embed(colour=discord.Colour.green())
                 embed.set_author(name=member.name, icon_url=member.avatar_url)
@@ -34,7 +34,7 @@ class Streaming(Cog, name="Streaming"):
     @Cog.listener()
     async def on_member_remove(self, member):
         try:
-            channel = bot.get_channel(638233816028151818)
+            channel = self.bot.get_channel(638233816028151818)
             try:
                 embed = discord.Embed(colour=discord.Colour.red())
                 embed.set_author(name=member.name, icon_url=member.avatar_url)
