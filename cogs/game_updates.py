@@ -14,19 +14,19 @@ crimson = 0xDC143C
 
 
 def getValorantGameUpdates():
-    URL = "https://api.rehkloos.com/valorant/news/en-us/game-updates"
+    URL = "https://api.axsddlr.xyz/valorant/news/en-us/game-updates"
     response = requests.get(URL)
     return response.json()
 
 
 def getLOLGameUpdates():
-    URL = "https://api.rehkloos.com/lol/patch_notes"
+    URL = "https://api.axsddlr.xyz/lol/patch_notes"
     response = requests.get(URL)
     return response.json()
 
 
 def getTFTGameUpdates():
-    URL = "https://api.rehkloos.com/tft/en-us/patch_notes"
+    URL = "https://api.axsddlr.xyz/tft/en-us/patch_notes"
     response = requests.get(URL)
     return response.json()
 

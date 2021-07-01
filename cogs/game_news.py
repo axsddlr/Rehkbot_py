@@ -18,19 +18,19 @@ crimson = 0xDC143C
 
 
 def getSpikeUpdates():
-    URL = "https://api.rehkloos.com/spikegg/latest_news"
+    URL = "https://api.axsddlr.xyz/spikegg/latest_news"
     response = requests.get(URL)
     return response.json()
 
 
 def getVLRUpdates():
-    URL = "https://api.rehkloos.com/vlr/news"
+    URL = "https://api.axsddlr.xyz/vlr/news"
     response = requests.get(URL)
     return response.json()
 
 
 def getVLRMatches():
-    URL = "https://api.rehkloos.com/vlr/match/results"
+    URL = "https://api.axsddlr.xyz/vlr/match/results"
     response = requests.get(URL)
     return response.json()
 
