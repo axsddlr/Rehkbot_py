@@ -15,6 +15,11 @@ def getValorantRank(Region, Name, Tag):
     response = requests.get(URL)
     return response.json()
 
+def getValorantLevel(Name, Tag):
+    URL = "https://api.henrikdev.xyz/valorant/v1/account/" + Name + "/" + Tag
+    response = requests.get(URL)
+    return response.json()
+
 
 def getValorantStats(Name, Tag, Type):
     URL = "http://vlrscrape.herokuapp.com/v1/stats/" + Name + "/" + Tag + "/" + Type
@@ -66,6 +71,7 @@ class Valorant(commands.Cog, name="Valorant"):
     async def valrank(self, ctx, Region: str = "", Name: str = "", Tag: str = ""):
 
         responseJSON = getValorantRank(Region, Name, Tag)
+        responseJSON2 = getValorantLevel(Name, Tag)
 
         # Check if profile exists or is public
         status = responseJSON["status"]
@@ -73,8 +79,9 @@ class Valorant(commands.Cog, name="Valorant"):
             riotid = Name + "#" + Tag
             rank = responseJSON["data"]["currenttierpatched"]
             elo = responseJSON["data"]["elo"]
+            level = responseJSON2["data"]["account_level"]
 
-            await ctx.message.reply("Rank: " + str(rank) + " | " + "Elo: " + str(elo))
+            await ctx.message.reply("Rank: " + str(rank) + " | " + "Elo: " + str(elo) + " | " + "Level: " + str(level))
             #  If it does not exist or is private
         elif status == "451":
             message = responseJSON["message"]
