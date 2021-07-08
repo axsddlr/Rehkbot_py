@@ -1,6 +1,5 @@
 aiohttp==3.6.3
 discord.py==1.7.3
-discord==1.7.3
 python-dotenv==0.18.0
 requests>= 2.18.4
 youtube_dl==2021.6.6
@@ -12,7 +11,7 @@ better-profanity==0.7.0
 tweepy==3.10.0
 APScheduler==3.7.0
 Discord-Anti-Spam==0.9.0
-python-Levenshtein==0.12.2
+python-Levenshtein-wheels==0.13.2
 ujson==4.0.2
 ffmpeg==1.4
 
