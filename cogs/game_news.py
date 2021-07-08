@@ -30,7 +30,7 @@ def getVLRUpdates():
 
 
 def getVLRMatches():
-    URL = "https://api.axsddlr.xyz/vlr/match/results"
+    URL = "https://api.axsddlr.xyz/v1/vlr/match/results"
     response = requests.get(URL)
     return response.json()
 
