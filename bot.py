@@ -3,14 +3,10 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
-# from apscheduler.schedulers.asyncio import AsyncIOScheduler
-# from apscheduler.triggers.cron import CronTrigger
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 STREAMER_NAME = os.getenv("STREAMER")
-
-# scheduler = AsyncIOScheduler(job_defaults={"misfire_grace_time": 900})
 
 
 def get_prefix(bot, message):
@@ -46,21 +42,6 @@ if __name__ == "__main__":
                 continue
 
 
-# initial_ext = ["cogs.twitchlive"]
-
-
-# async def reload():
-#     for extension in initial_ext:
-#         try:
-#             # bot.unload_extension(extension)
-#             # bot.load_extension(extension)
-#             bot.reload_extension(extension)
-#             print("done")
-#         except Exception as e:
-#             print(f"Failed to load the {extension}", file=sys.stderr)
-#             traceback.print_exc()
-
-
 @bot.event
 async def on_ready():
     # Twitch URL
@@ -70,13 +51,5 @@ async def on_ready():
     )
     print("Bot connected")
 
-    # scheduler.add_job(
-    #     reload, CronTrigger(day_of_week="mon-sun", hour="21", timezone="US/Eastern")
-    # )
-    # scheduler.add_job(reload, "interval", seconds=43200)
 
-    # starting the scheduler
-    # scheduler.start()
-
-
-bot.run(TOKEN, bot=True, reconnect=True)
+bot.run(TOKEN, reconnect=True)
