@@ -26,7 +26,7 @@ class ModeratorCog(commands.Cog, name="Moderator"):
         elif amount == "all":
             await ctx.channel.purge()
         else:
-            await ctx.channel.purge(limit=int(amount))
+            await ctx.channel.purge(limit=int(amount-1))
 
     # MUTE MEMBERS
 
