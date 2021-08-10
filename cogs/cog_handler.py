@@ -1,6 +1,5 @@
-# thanks to evieepy on github https://gist.github.com/EvieePy/d78c061a4798ae81be9825468fe146be
-import discord
 from discord.ext import commands
+from discord.ext.commands import has_permissions
 
 
 class Owner(commands.Cog):
@@ -8,39 +7,39 @@ class Owner(commands.Cog):
         self.bot = bot
 
     @commands.command(name="load", hidden=True)
-    @commands.is_owner()
+    @has_permissions(manage_guild=True)
     async def load(self, ctx, *, cog: str):
         try:
             self.bot.load_extension(cog)
-        except Exception as e:
+        except commands.ExtensionError:
             await ctx.send("**`ERROR:`**")
         else:
             await ctx.send("**`SUCCESS`**")
 
     @commands.command(name="unload", hidden=True)
-    @commands.is_owner()
+    @has_permissions(manage_guild=True)
     async def unload(self, ctx, *, cog: str):
         print(cog)
         try:
             self.bot.unload_extension(cog)
-        except Exception as e:
+        except commands.ExtensionError:
             await ctx.send("**`ERROR:`**")
         else:
             await ctx.send("**`SUCCESS`**")
 
     @commands.command(name="reload", hidden=True)
-    @commands.is_owner()
+    @has_permissions(manage_guild=True)
     async def reload(self, ctx, *, cog: str):
         try:
             self.bot.unload_extension(cog)
             self.bot.load_extension(cog)
-        except Exception as e:
+        except commands.ExtensionError:
             await ctx.send("**`ERROR:`**")
         else:
             await ctx.send("**`SUCCESS`**")
 
     @commands.command(name="shards", hidden=True)
-    @commands.is_owner()
+    @has_permissions(manage_guild=True)
     async def getShards(self, ctx):
         await ctx.send("Shards: " + str(self.bot.shard_count))
 
