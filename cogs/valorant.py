@@ -1,7 +1,7 @@
-import discord
+import nextcord
 import requests
-from discord.ext import commands
-from discord.ext.commands.cooldowns import BucketType
+from nextcord.ext import commands
+from nextcord.ext.commands.cooldowns import BucketType
 
 
 def getValorantGameUpdates():
@@ -14,6 +14,7 @@ def getValorantRank(Region, Name, Tag):
     URL = "https://api.henrikdev.xyz/valorant/v1/mmr/" + Region + "/" + Name + "/" + Tag
     response = requests.get(URL)
     return response.json()
+
 
 def getValorantLevel(Name, Tag):
     URL = "https://api.henrikdev.xyz/valorant/v1/account/" + Name + "/" + Tag
@@ -50,14 +51,14 @@ class Valorant(commands.Cog, name="Valorant"):
         title = responseJSON["data"][0]["title"]
         url = responseJSON["data"][0]["url"]
 
-        embed = discord.Embed(
+        embed = nextcord.Embed(
             title=title,
             description=url,
             # crimson color code
-            colour=(0xDC143C),
+            colour=0xDC143C,
         )
         embed.set_image(url=banner)
-        file = discord.File(
+        file = nextcord.File(
             "./assets/images/valorant_sm.png", filename="valorant_sm.png"
         )
         embed.set_thumbnail(url="attachment://valorant_sm.png")
@@ -68,7 +69,7 @@ class Valorant(commands.Cog, name="Valorant"):
         name="Valorant Rank", aliases=["valrank"], help="Displays Valorant Rank"
     )
     # @commands.cooldown(2, 60, BucketType.user)
-    async def valrank(self, ctx, Region: str = "", Name: str = "", Tag: str = ""):
+    async def valrank(self, ctx, Region, Name, Tag):
 
         responseJSON = getValorantRank(Region, Name, Tag)
         responseJSON2 = getValorantLevel(Name, Tag)
@@ -123,39 +124,39 @@ class Valorant(commands.Cog, name="Valorant"):
         flawless = responseJSON["data"]["segments"]["flawless"]
         # user = responseJSON['user']
         url = (
-            "https://tracker.gg/valorant/profile/riot/"
-            + Name
-            + "%23"
-            + Tag
-            + "/overview?playlist="
-            + Type
+                "https://tracker.gg/valorant/profile/riot/"
+                + Name
+                + "%23"
+                + Tag
+                + "/overview?playlist="
+                + Type
         )
 
-        embed = discord.Embed(
+        embed = nextcord.Embed(
             title=riotid + "'s " + Type,
             description=url,
             # crimson color code
-            colour=(0xDC143C),
+            colour=0xDC143C,
         )
-        file = discord.File(
+        file = nextcord.File(
             "./assets/images/valorant_sm.png", filename="valorant_sm.png"
         )
         embed.set_thumbnail(url="attachment://valorant_sm.png")
         # embed.add_field(name="Total Time Played", value=(TTP), inline=True)
-        embed.add_field(name=("Kills"), value=(kills), inline=True)
-        embed.add_field(name=("Deaths"), value=(deaths), inline=True)
-        embed.add_field(name="Wins", value=(wins), inline=True)
-        embed.add_field(name="Win %", value=(winr), inline=True)
-        embed.add_field(name="KDR", value=(kdr), inline=True)
-        embed.add_field(name="Assists", value=(asst), inline=True)
+        embed.add_field(name="Kills", value=kills, inline=True)
+        embed.add_field(name="Deaths", value=deaths, inline=True)
+        embed.add_field(name="Wins", value=wins, inline=True)
+        embed.add_field(name="Win %", value=winr, inline=True)
+        embed.add_field(name="KDR", value=kdr, inline=True)
+        embed.add_field(name="Assists", value=asst, inline=True)
         # embed.add_field(name="Matches", value=(matches), inline=True)
-        embed.add_field(name="Headshots", value=(headshots), inline=True)
-        embed.add_field(name="Headshots %", value=(headshotpercentage), inline=True)
-        embed.add_field(name="First Bloods", value=(firstbloods), inline=True)
-        embed.add_field(name="Aces", value=(aces), inline=True)
-        embed.add_field(name="Clutches", value=(clutches), inline=True)
-        embed.add_field(name="Flawless", value=(flawless), inline=True)
-        embed.add_field(name=" .", value=(". "), inline=True)
+        embed.add_field(name="Headshots", value=headshots, inline=True)
+        embed.add_field(name="Headshots %", value=headshotpercentage, inline=True)
+        embed.add_field(name="First Bloods", value=firstbloods, inline=True)
+        embed.add_field(name="Aces", value=aces, inline=True)
+        embed.add_field(name="Clutches", value=clutches, inline=True)
+        embed.add_field(name="Flawless", value=flawless, inline=True)
+        embed.add_field(name=" .", value=". ", inline=True)
 
         await ctx.send(file=file, embed=embed)
 

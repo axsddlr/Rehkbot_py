@@ -1,13 +1,6 @@
-from asyncio import sleep
-from datetime import datetime, timedelta
-from typing import Optional
-
 from better_profanity import profanity
-from discord import Embed, Member
-from discord.ext.commands import Cog, Greedy
-from discord.ext.commands import CheckFailure
-from discord.ext.commands import command, has_permissions, bot_has_permissions
-
+from nextcord.ext.commands import Cog
+from nextcord.ext.commands import command, has_permissions
 
 profanity.load_censor_words_from_file("./assets/bad_words.txt")
 

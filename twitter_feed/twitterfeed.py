@@ -1,10 +1,9 @@
 import os
-
 from json import load
-from tweepy import OAuthHandler, API, StreamListener, Stream
+
 from discord_webhook import DiscordWebhook
-from requests import get
 from dotenv import load_dotenv
+from tweepy import OAuthHandler, API, StreamListener, Stream
 
 load_dotenv()
 consumer = os.getenv('consumer')
@@ -12,8 +11,6 @@ consumer_s = os.getenv('consumer_s')
 token = os.getenv('token')
 token_s = os.getenv('token_s')
 webhook_urls = os.getenv('webhook_urls')
-
-
 
 # OPEN CONFIG FILE
 try:
@@ -53,10 +50,11 @@ for username in users:
         user = api.get_user(screen_name=username)
         feed.append(str(user.id))
     except Exception as f:
-        print("[%s] -> Failed to add %s to feed! (%s)" % (username, username, str(f), ))
+        print("[%s] -> Failed to add %s to feed! (%s)" % (username, username, str(f),))
         continue
 
-    print("[%s] -> Successfully added %s @%s to feed!" % (username, user.name, username, ))
+    print("[%s] -> Successfully added %s @%s to feed!" % (username, user.name, username,))
+
 
 # CLASS OUR STREAM LISTENER
 
@@ -86,7 +84,7 @@ class MyStreamListener(StreamListener):
     # ON ERROR - RESETS STREAM
     def on_error(self, status_code):
         if status_code == 420:
-            #returning False in on_error disconnects the stream
+            # returning False in on_error disconnects the stream
             return False
 
 

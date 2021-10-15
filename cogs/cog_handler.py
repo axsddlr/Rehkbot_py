@@ -1,5 +1,5 @@
-from discord.ext import commands
-from discord.ext.commands import has_permissions
+from nextcord.ext import commands
+from nextcord.ext.commands import has_permissions
 
 
 class Owner(commands.Cog):

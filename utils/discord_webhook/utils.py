@@ -1,6 +1,6 @@
-from base64 import b64encode
-import types
 import functools
+import types
+from base64 import b64encode
 
 
 def copy_func(f):
@@ -47,7 +47,7 @@ def mime_type(data):
     elif data.startswith(b"\xFF\xD8") and data.rstrip(b"\0").endswith(b"\xFF\xD9"):
         return "image/jpeg"
     elif data.startswith(b"\x47\x49\x46\x38\x37\x61") or data.startswith(
-        b"\x47\x49\x46\x38\x39\x61"
+            b"\x47\x49\x46\x38\x39\x61"
     ):
         return "image/gif"
     else:

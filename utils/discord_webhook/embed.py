@@ -103,7 +103,7 @@ class Embed:
         self.url = url
 
     def set_timestamp(
-        self, time: Union[str, datetime.datetime] = None, now: bool = False
+            self, time: Union[str, datetime.datetime] = None, now: bool = False
     ) -> None:
         """
         Sets the timestamp of the embed.

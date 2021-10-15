@@ -1,5 +1,6 @@
 from re import search
-from discord.ext.commands import Cog
+
+from nextcord.ext.commands import Cog
 
 
 class Links(Cog):
@@ -13,7 +14,9 @@ class Links(Cog):
             859701236714700810,
             857484003086827521,
         )
-        self.url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+        self.url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(" \
+                         r"\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".," \
+                         r"<>?«»“”‘’])) "
 
     @Cog.listener()
     async def on_message(self, message):

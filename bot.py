@@ -1,8 +1,8 @@
 import os
-import discord
-from discord.ext import commands
-from dotenv import load_dotenv
 
+import nextcord
+from dotenv import load_dotenv
+from nextcord.ext import commands
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -24,12 +24,32 @@ def get_prefix(bot, message):
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
 
-bot = commands.Bot(command_prefix=get_prefix, description="A Rewrite Cog Example")
-bot.remove_command("help")
+def main():
+    # allows privledged intents for monitoring members joining, roles editing, and role assignments
+    # these need to be enabled in the developer portal as well
+    intents = nextcord.Intents.default()
 
+    # To enable guild intents:
+    intents.guilds = True
 
-# This is what we're going to use to load the cogs on startup
-if __name__ == "__main__":
+    # To enable member intents:
+    intents.members = True
+
+    intents.messages = True
+
+    # Set custom status to "Listening to ?help"
+    activity = nextcord.Activity(
+        type=nextcord.ActivityType.listening, name=f"!help"
+    )
+
+    bot = commands.Bot(
+        command_prefix=get_prefix,
+        intents=intents,
+        activity=activity,
+    )
+
+    bot.remove_command("help")
+
     for filename in os.listdir("cogs"):
         if filename.endswith(".py"):
             try:
@@ -41,15 +61,15 @@ if __name__ == "__main__":
                 print("{0} was not loaded".format(filename))
                 continue
 
+    @bot.event
+    async def on_ready():
+        """When discord is connected"""
+        print(f"{bot.user.name} has connected to Discord!")
 
-@bot.event
-async def on_ready():
-    # Twitch URL
-    my_twitch_url = "https://twitch.tv/" + f"{STREAMER_NAME}"
-    await bot.change_presence(
-        activity=discord.Streaming(name="Rehhk", url=my_twitch_url)
-    )
-    print("Bot connected")
+    # Run Discord bot
+    bot.run(TOKEN)
 
 
-bot.run(TOKEN, reconnect=True)
+# This is what we're going to use to load the cogs on startup
+if __name__ == "__main__":
+    main()

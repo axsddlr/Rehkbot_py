@@ -1,13 +1,13 @@
-import discord
-from discord.ext import commands
-from discord.ext.commands.cooldowns import BucketType
+from nextcord.ext import commands
+from nextcord.ext.commands.cooldowns import BucketType
 
 
 class StrawPoll(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def find_title(self, message):
+    @staticmethod
+    def find_title(message):
         # this is the index of the first character of the title
         first = message.find("{") + 1
         # index of the last character of the title
@@ -29,7 +29,7 @@ class StrawPoll(commands.Cog):
             else:
                 return options
         options.append(message[first:last])
-        message = message[last + 1 :]
+        message = message[last + 1:]
         return self.find_options(message, options)
 
     @commands.command(name="strawpoll")
@@ -44,14 +44,14 @@ class StrawPoll(commands.Cog):
 
             try:
                 async with self.bot.http_session.post(
-                    "https://strawpoll.com/api/poll",
-                    json={
-                        "poll": {
-                            "title": title,
-                            "answers": options,
-                        }
-                    },
-                    headers={"Content Type": "application/json"},
+                        "https://strawpoll.com/api/poll",
+                        json={
+                            "poll": {
+                                "title": title,
+                                "answers": options,
+                            }
+                        },
+                        headers={"Content Type": "application/json"},
                 ) as resp:
                     json = await resp.json()
 

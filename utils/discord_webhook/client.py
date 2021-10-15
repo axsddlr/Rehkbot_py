@@ -1,15 +1,15 @@
+import asyncio
 import re
+import time
+from typing import Union, List, Optional, Coroutine
 
 import aiohttp
 import requests
-from typing import Union, List, Optional, Coroutine
-import time
-import asyncio
 
-from .utils import bytes_to_base64_data
-from .utils import aliased, alias
 from .embed import Embed
 from .file import File
+from .utils import aliased, alias
+from .utils import bytes_to_base64_data
 
 try:
     import ujson as json
@@ -126,11 +126,11 @@ class Webhook:
     )
 
     def __init__(
-        self,
-        url: str = "",
-        session: Union[aiohttp.ClientSession, requests.Session, None] = None,
-        is_async: bool = False,
-        **options
+            self,
+            url: str = "",
+            session: Union[aiohttp.ClientSession, requests.Session, None] = None,
+            is_async: bool = False,
+            **options
     ):
 
         self.url = url
@@ -175,7 +175,7 @@ class Webhook:
 
     @classmethod
     def Async(
-        cls, url: str = "", session: Optional[aiohttp.ClientSession] = None, **options
+            cls, url: str = "", session: Optional[aiohttp.ClientSession] = None, **options
     ) -> "Webhook":
         """
         Returns a new instance of Webhook with :attr:`is_async` set
@@ -212,14 +212,14 @@ class Webhook:
 
     @alias("execute")
     def send(
-        self,
-        content: str = "",
-        embed: Optional[Embed] = None,
-        embeds: Optional[List[Embed]] = None,
-        file: Optional[File] = None,
-        username: str = "",
-        avatar_url: str = "",
-        tts: bool = False,
+            self,
+            content: str = "",
+            embed: Optional[Embed] = None,
+            embeds: Optional[List[Embed]] = None,
+            file: Optional[File] = None,
+            username: str = "",
+            avatar_url: str = "",
+            tts: bool = False,
     ) -> "Webhook":
         """
         Sends a message to discord through the webhook.
@@ -328,11 +328,11 @@ class Webhook:
         return self._request(method="DELETE")
 
     def _request(
-        self,
-        method: str = "POST",
-        payload: dict = None,
-        file: Optional[File] = None,
-        headers: dict = None,
+            self,
+            method: str = "POST",
+            payload: dict = None,
+            file: Optional[File] = None,
+            headers: dict = None,
     ) -> Union[
         Optional["Webhook"], Coroutine[Optional["Webhook"], None, Optional["Webhook"]]
     ]:
@@ -399,11 +399,11 @@ class Webhook:
         return self
 
     async def _async_request(
-        self,
-        method: str = "POST",
-        payload: dict = None,
-        file: Optional[File] = None,
-        headers: dict = None,
+            self,
+            method: str = "POST",
+            payload: dict = None,
+            file: Optional[File] = None,
+            headers: dict = None,
     ) -> Optional["Webhook"]:
         """
         Async version of the request function using aiohttp.

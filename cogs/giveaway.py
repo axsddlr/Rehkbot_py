@@ -1,7 +1,8 @@
 import datetime
 import random
-import discord
-from discord.ext import commands
+
+import nextcord
+from nextcord.ext import commands
 
 
 class Giveaway(commands.Cog):
@@ -37,7 +38,7 @@ class Giveaway(commands.Cog):
     @commands.bot_has_permissions(manage_messages=True, read_message_history=True)
     @giveaway.command(name="start", help="Begins the process of hosting a giveaway.")
     async def start_giveaway(
-        self, ctx, channel: discord.TextChannel, title, prize, end_date: int, image=None
+            self, ctx, channel: nextcord.TextChannel, title, prize, end_date: int, image=None
     ):
         """
         A method to purge messages from a channel.
@@ -53,7 +54,7 @@ class Giveaway(commands.Cog):
         Parameters:
             ctx (commands.Context): The invocation context.
             limit (int): The number of messages to purge. Default: 0.
-            user (discord.User): The User to delete messages from. Default: None.
+            user (nextcord.User): The User to delete messages from. Default: None.
         Output:
             None.
         Returns:
@@ -61,7 +62,7 @@ class Giveaway(commands.Cog):
         """
         if channel:
             time = datetime.datetime.fromtimestamp(end_date)
-            embed = discord.Embed(title=title, color=0x00BBFF)
+            embed = nextcord.Embed(title=title, color=0x00BBFF)
             if image:
                 embed.set_thumbnail(url=image)
             embed.description = "React with 🎉 to enter!"
@@ -78,7 +79,7 @@ class Giveaway(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True, read_message_history=True)
     @giveaway.command(name="end", help="Selects a winner of a giveaway.")
-    async def end_giveaway(self, ctx, message: discord.Message, remove=False):
+    async def end_giveaway(self, ctx, message: nextcord.Message, remove=False):
         """
         A method to purge messages from a channel.
         Should a user ID be supplied,
@@ -92,7 +93,7 @@ class Giveaway(commands.Cog):
         Parameters:
             ctx (commands.Context): The invocation context.
             limit (int): The number of messages to purge. Default: 0.
-            user (discord.User): The User to delete messages from. Default: None.
+            user (nextcord.User): The User to delete messages from. Default: None.
         Output:
             None.
         Returns:
@@ -108,7 +109,7 @@ class Giveaway(commands.Cog):
                 users = [user for user in users if not user.bot]
                 winner = random.choice(users)
 
-                embed = discord.Embed(
+                embed = nextcord.Embed(
                     title=":confetti_ball: Giveaway Winner! :confetti_ball:",
                     color=0x00BBFF,
                 )

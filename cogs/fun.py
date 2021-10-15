@@ -1,7 +1,7 @@
-import discord
 import random
-import time
-from discord.ext import commands
+
+import nextcord
+from nextcord.ext import commands
 
 
 class FunCog(commands.Cog, name="Games & Fun"):
@@ -56,7 +56,7 @@ class FunCog(commands.Cog, name="Games & Fun"):
         name="Avatar",
         help="Get the avatar URL of the tagged user(s), or your own avatar",
     )
-    async def avatar(self, ctx, user: discord.User = ""):
+    async def avatar(self, ctx, user: nextcord.User = ""):
         if not user:
             user = ctx.author
             uid = str(ctx.author.id)
@@ -64,7 +64,7 @@ class FunCog(commands.Cog, name="Games & Fun"):
             uid = str(user.id)
         author = ctx.message.author
         pfp = author.avatar_url
-        embed = discord.Embed()
+        embed = nextcord.Embed()
         embed.set_image(url=pfp)
         embed.set_author(name=user.display_name, icon_url=user.avatar_url)
         await ctx.send(embed=embed)

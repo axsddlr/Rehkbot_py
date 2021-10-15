@@ -58,7 +58,8 @@ Description =
 
 ### PM2
 
-PM2 is an alternative script provided by NodeJS, which will reboot your bot whenever it crashes and keep it up with a nice status. You can install it by doing `npm install -g pm2` and you should be done.
+PM2 is an alternative script provided by NodeJS, which will reboot your bot whenever it crashes and keep it up with a
+nice status. You can install it by doing `npm install -g pm2` and you should be done.
 
 ```
 # Start the bot

@@ -1,8 +1,8 @@
 {
-    "only_push_tweets_from_author": true,
-    "retweet": true,
-    "usernames_to_watch": [
-        "lookner",
-        "elonmusk"
-        ]
+  "only_push_tweets_from_author": true,
+  "retweet": true,
+  "usernames_to_watch": [
+    "lookner",
+    "elonmusk"
+  ]
 }
