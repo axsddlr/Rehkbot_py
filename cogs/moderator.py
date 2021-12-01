@@ -21,11 +21,11 @@ class ModeratorCog(commands.Cog, name="Moderator"):
     @commands.has_permissions(ban_members=True, kick_members=True)
     async def clear(self, ctx, amount=None):
         if amount is None:
-            await ctx.channel.purge(limit=5)
+            await ctx.channel.purge(limit=5 + 1)
         elif amount == "all":
             await ctx.channel.purge()
         else:
-            await ctx.channel.purge(limit=int(amount))
+            await ctx.channel.purge(limit=int(amount) + 1)
 
     # MUTE MEMBERS
 
@@ -83,9 +83,18 @@ class ModeratorCog(commands.Cog, name="Moderator"):
 
         await ctx.send(f"{member} wasn't found :(")
 
+    @commands.command()
+    @commands.has_permissions(manage_messages=True)
+    async def slowmode(self, ctx, seconds=None):
 
-# The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case MembersCog.
-# When we load the cog, we use the name of the file.
+        if seconds is None:
+            await ctx.channel.edit(slowmode_delay=0)
+            await ctx.send(f"Succesfully removed slowmode!")
+
+
+        else:
+            await ctx.channel.edit(slowmode_delay=seconds)
+            await ctx.send(f"Succesfully set slowmode to {seconds} seconds")
 
 
 def setup(bot):

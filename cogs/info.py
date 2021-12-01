@@ -69,9 +69,13 @@ class InfoCog(commands.Cog, name="Info"):
 
         await ctx.send(content=f"ℹ About **{ctx.bot.user}** | **`1.0.0`**", embed=embed)
 
+    @commands.command(aliases=["members"])
+    async def membercount(self, ctx):
+        embed = nextcord.Embed(title=ctx.guild.name, description=f"Members: {ctx.guild.member_count}",
+                               color=0xDC143C)
+        embed.set_footer(text=f"Requested by {ctx.author}")
 
-# The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case MembersCog.
-# When we load the cog, we use the name of the file.
+        await ctx.send(embed=embed)
 
 
 def setup(bot):

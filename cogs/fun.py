@@ -1,6 +1,7 @@
 import random
 
 import nextcord
+from googletrans import Translator
 from nextcord.ext import commands
 
 
@@ -56,22 +57,21 @@ class FunCog(commands.Cog, name="Games & Fun"):
         name="Avatar",
         help="Get the avatar URL of the tagged user(s), or your own avatar",
     )
-    async def avatar(self, ctx, user: nextcord.User = ""):
-        if not user:
-            user = ctx.author
-            uid = str(ctx.author.id)
-        else:
-            uid = str(user.id)
-        author = ctx.message.author
-        pfp = author.avatar_url
-        embed = nextcord.Embed()
-        embed.set_image(url=pfp)
-        embed.set_author(name=user.display_name, icon_url=user.avatar_url)
+    async def avatar(self, ctx):
+        embed = nextcord.Embed(title=f"{ctx.author.name}'s avatar", color=0xDC143C)
+        embed.set_image(url=ctx.author.avatar)
+        embed.set_footer(text=f'Requested by {ctx.author}')
+
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def translate(self, ctx, lang, *, args):
+        t = Translator()
+        a = t.translate(args, dest=lang)
 
-# The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case MembersCog.
-# When we load the cog, we use the name of the file.
+        embed = nextcord.Embed(title="Translation", description=a.text, color=0x00ff11)
+        embed.set_footer(text=f"Translated by {ctx.author}")
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
