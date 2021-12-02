@@ -64,14 +64,16 @@ class FunCog(commands.Cog, name="Games & Fun"):
 
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=["translate"],
+                      name="google translate",
+                      help="Usage: `.translate {destination language} {the sentence you want to translate}",
+                      )
     async def translate(self, ctx, lang, *, args):
-        t = Translator()
-        a = t.translate(args, dest=lang)
+        """Usage: `.translate {destination language} {the sentence you want to translate}`"""
+        translator = Translator()
+        translation = translator.translate(args, dest=lang)
 
-        embed = nextcord.Embed(title="Translation", description=a.text, color=0x00ff11)
-        embed.set_footer(text=f"Translated by {ctx.author}")
-        await ctx.send(embed=embed)
+        await ctx.send(f"{lang} " + "translation: " + f"**`{translation.text}`**")
 
 
 def setup(bot):
