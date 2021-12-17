@@ -10,7 +10,7 @@ tweepy==4.4.0
 APScheduler==3.8.1
 Discord-Anti-Spam==1.1.2
 python-Levenshtein-wheels==0.13.2
-ujson==4.3.0
+ujson==5.0.0
 ffmpeg==1.4
 nextcord==2.0.0a4
 youtube_dl==2021.6.6
