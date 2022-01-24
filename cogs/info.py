@@ -2,9 +2,14 @@ import datetime
 import os
 import time
 
-import nextcord
+import discord
 import psutil
-from nextcord.ext import commands
+from discord.commands import slash_command
+from discord.ext import commands
+
+from utils.utils import cfg
+
+guilds = [cfg["GUILD_ID"]]
 
 start_time = time.time()
 
@@ -18,29 +23,16 @@ class InfoCog(commands.Cog, name="Info"):
     async def on_ready(self):
         time.sleep(0.2)
 
-    @commands.command()
-    @commands.guild_only()
-    async def joined(self, ctx, *, member: nextcord.Member):
-        """Says when a member joined."""
-        await ctx.send(f"{member.display_name} joined on {member.joined_at}")
-
-    @commands.command(name="ping", help="check if bot is working")
-    @commands.has_any_role(236267540777533440)
+    @slash_command(name="ping", description='Check bot latency.', guild_ids=guilds)
     async def ping(self, ctx):
-        before = time.monotonic()
-        before_ws = int(round(self.bot.latency * 1000, 1))
-        message = await ctx.send("🏓 Pong")
-        ping = (time.monotonic() - before) * 1000
-        await message.edit(content=f"🏓 WS: {before_ws}ms  |  REST: {int(ping)}ms")
-
-    @commands.command(aliases=["botinvite"])
-    async def invite(self, ctx):
-        """ Invite me to your server """
-        await ctx.send(
-            f"**{ctx.author.name}**, use this URL to invite me\n<{nextcord.utils.oauth_url(self.bot.user.id)}>"
+        embed = discord.Embed(
+            title='🏓|Pong!',
+            description=f'Latency: {self.bot.latency} ms',
+            color=discord.Color.green()
         )
+        await ctx.respond(embed=embed)
 
-    @commands.command(aliases=["info"])
+    @slash_command(name="info", guild_ids=guilds)
     async def uptime(self, ctx):
         current_time = time.time()
         difference = int(round(current_time - start_time))
@@ -48,13 +40,13 @@ class InfoCog(commands.Cog, name="Info"):
         ramUsage = self.process.memory_full_info().rss / 1024 ** 2
         avgmembers = round(len(self.bot.users) / len(self.bot.guilds))
 
-        embed = nextcord.Embed(
+        embed = discord.Embed(
             # crimson color code
             colour=0xDC143C
         )
-        embed.set_thumbnail(url=ctx.bot.user.avatar_url)
+        embed.set_thumbnail(url=ctx.author.avatar)
         embed.add_field(name="Uptime", value=text, inline=True)
-        embed.add_field(name="Library", value="nextcord", inline=True)
+        embed.add_field(name="Library", value="discord", inline=True)
         embed.add_field(
             name="Servers",
             value=f"{len(ctx.bot.guilds)} ( avg: {avgmembers} users/server )",
@@ -67,15 +59,15 @@ class InfoCog(commands.Cog, name="Info"):
         )
         embed.add_field(name="RAM", value=f"{ramUsage:.2f} MB", inline=True)
 
-        await ctx.send(content=f"ℹ About **{ctx.bot.user}** | **`1.0.0`**", embed=embed)
+        await ctx.respond(content=f"ℹ About **{ctx.bot.user}** | **`1.0.0`**", embed=embed)
 
-    @commands.command(aliases=["members"])
+    @slash_command(name="members", guild_ids=guilds)
     async def membercount(self, ctx):
-        embed = nextcord.Embed(title=ctx.guild.name, description=f"Members: {ctx.guild.member_count}",
-                               color=0xDC143C)
+        embed = discord.Embed(title=ctx.guild.name, description=f"Members: {ctx.guild.member_count}",
+                              color=0xDC143C)
         embed.set_footer(text=f"Requested by {ctx.author}")
 
-        await ctx.send(embed=embed)
+        await ctx.respond(embed=embed)
 
 
 def setup(bot):

@@ -1,11 +1,13 @@
-import os
+import discord
+from discord.commands import slash_command
+from discord.ext import commands
+from discord.ext.commands import has_permissions
+from discord.commands import Option  #Importing the packages
+import datetime
 
-import nextcord
-from nextcord.ext import commands
-from dotenv import load_dotenv
+from utils.utils import cfg
 
-load_dotenv()
-bot_id = os.getenv("DISCORD_BOT_ID")
+guilds = [cfg["GUILD_ID"]]
 
 
 class ModeratorCog(commands.Cog, name="Moderator"):
@@ -14,11 +16,11 @@ class ModeratorCog(commands.Cog, name="Moderator"):
 
     # clear /prune command
 
-    @commands.command(
+    @slash_command(
         name="purge",
-        hidden=True,
+        guild_ids=guilds,
     )
-    @commands.has_permissions(ban_members=True, kick_members=True)
+    @has_permissions(ban_members=True, kick_members=True)
     async def clear(self, ctx, amount=None):
         if amount is None:
             await ctx.channel.purge(limit=5 + 1)
@@ -29,72 +31,70 @@ class ModeratorCog(commands.Cog, name="Moderator"):
 
     # MUTE MEMBERS
 
-    @commands.command(aliases=["m"], hidden=True)
+    @slash_command(guild_ids=guilds)
     @commands.has_permissions(kick_members=True)
-    async def mute(self, ctx, member: nextcord.Member):
-        muted_role = ctx.guild.get_role(bot_id)
+    async def kick(self, ctx, member: Option(discord.Member)):
 
-        await member.add_roles(muted_role)
-        await ctx.send(f"{member.mention} has been muted")
+        await member.kick(
+            reason=None)  # kick th member with no reason. you can add another option with "str" as the first param
+        await ctx.respond("Done.")
 
-    # KICK MEMBERS
-
-    @commands.command(aliases=["k"], hidden=True)
-    @commands.has_permissions(kick_members=True)
-    async def kick(
-            self, ctx, member: nextcord.Member, *, reason="no reason provided :/"
-    ):
-        try:
-            await member.send(
-                f"{member.name} has been kicked from this community, because {reason}"
-            )
-        except:
-            await ctx.send(f"oops! it seems like {member.name} has closed their dms")
-            await member.kick(reason=reason)
-
-    # BAN MEMBERS
-
-    @commands.command(aliases=["b"], hidden=True)
+    @slash_command(guild_ids=guilds)
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member: nextcord.Member, *, reason="no reason provided :/"):
-        try:
-            await member.send(
-                f"{member.name} has been banned from this community, because {reason}"
-            )
-        except:
-            await ctx.send(f"oops! it seems like {member.name} has closed their dms")
-            await member.ban(reason=reason)
+    async def ban(self, ctx, member: Option(discord.Member)):
 
-    # UNBAN MEMBERS
+        await member.ban(reason=None, delete_message_days=0)  # ban and dont delete any messages
+        await ctx.respond("Done.")
 
-    @commands.command(aliases=["ub"], hidden=True)
+    @commands.command()  # Because unban doesnt work with slash commands
     @commands.has_permissions(ban_members=True)
-    async def unban(self, ctx, *, member: nextcord.Member):
-        banned_users = await ctx.guild.bans()
-        member_name, member_disc = member.split("#")
+    async def unban(self, ctx, member: discord.Member):
 
-        for banned_entry in banned_users:
-            user = banned_entry.user
+        await member.unban(member, reason=None)
+        await ctx.respond("Done.")
 
-        if (user.name, user.discrimiator) == (member_name, member_disc):
-            await ctx.guild.unban(user)
-            await ctx.send(f"{member_name} has been unbanned!")
-            return
+    @slash_command(guild_ids=guilds)
+    @commands.has_permissions(manage_roles=True)
+    async def mute(self, ctx, member: Option(discord.Member)):
+        muted_role = ctx.guild.get_role(1234567890)  # get the muted role with ID
 
-        await ctx.send(f"{member} wasn't found :(")
+        await member.add_roles(muted_role)  # add the mute role
 
-    @commands.command()
-    @commands.has_permissions(manage_messages=True)
+        await ctx.respond("The member has been muted")
+
+    @slash_command(guild_ids=guilds)
+    @commands.has_permissions(manage_roles=True)
+    async def unmute(self, ctx, member: Option(discord.Member)):
+        muted_role = ctx.guild.get_role(1234567890)
+
+        await member.remove_roles(muted_role)  # remove muted role
+
+        await ctx.respond("The member has been unmuted")
+
+    @slash_command(guild_ids=guilds)
+    async def membercount(self, ctx):
+        await ctx.respond(ctx.guild.member_count)  # get guild no. of members
+
+    @slash_command(guild_ids=guilds)
+    async def timeout(self, ctx, member: Option(discord.Member), minutes: Option(int)):
+        """Apply a timeout to a member"""
+
+        duration = datetime.timedelta(minutes=minutes)
+        await member.timeout_for(duration)  # timeout for the amount of time given, then remove timeout
+        await ctx.reply(f"Member timed out for {minutes} minutes.")
+
+    @slash_command(name="slowmode", hidden=True, guild_ids=guilds)
+    @has_permissions(manage_messages=True)
     async def slowmode(self, ctx, seconds=None):
 
         if seconds is None:
             await ctx.channel.edit(slowmode_delay=0)
-            await ctx.send(f"Succesfully removed slowmode!")
+            await ctx.respond(f"Succesfully removed slowmode!")
 
 
         else:
             await ctx.channel.edit(slowmode_delay=seconds)
-            await ctx.send(f"Succesfully set slowmode to {seconds} seconds")
+            await ctx.respond(f"Succesfully set slowmode to {seconds} seconds")
 
 
 def setup(bot):

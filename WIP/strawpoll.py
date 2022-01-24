@@ -1,5 +1,10 @@
-from nextcord.ext import commands
-from nextcord.ext.commands.cooldowns import BucketType
+from discord.commands import slash_command
+from discord.ext import commands
+from discord.ext.commands.cooldowns import BucketType
+
+from utils.utils import cfg
+
+guilds = [cfg["GUILD_ID"]]
 
 
 class StrawPoll(commands.Cog):
@@ -32,7 +37,10 @@ class StrawPoll(commands.Cog):
         message = message[last + 1:]
         return self.find_options(message, options)
 
-    @commands.command(name="strawpoll")
+    @slash_command(
+        name="strawpoll",
+        guild_ids=guilds,
+    )
     @commands.cooldown(2, 60, BucketType.user)
     async def strawpoll(self, ctx):
         if not ctx.message.author.bot:
@@ -55,7 +63,7 @@ class StrawPoll(commands.Cog):
                 ) as resp:
                     json = await resp.json()
 
-                    await ctx.message.channel.send(
+                    await ctx.message.channel.respond(
                         "https://strawpoll.com/" + str(json["content_id"])
                     )
 
@@ -65,7 +73,7 @@ class StrawPoll(commands.Cog):
     @strawpoll.error
     async def strawpoll_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
-            await ctx.send(error)
+            await ctx.respond(error)
 
 
 def setup(bot):

@@ -1,6 +1,10 @@
 from better_profanity import profanity
-from nextcord.ext.commands import Cog
-from nextcord.ext.commands import command, has_permissions
+from discord.ext.commands import Cog
+from discord.ext.commands import command, has_permissions
+from discord.commands import slash_command
+from utils.utils import cfg
+
+guilds = [cfg["GUILD_ID"]]
 
 profanity.load_censor_words_from_file("./assets/bad_words.txt")
 
@@ -9,16 +13,16 @@ class Profanity(Cog, name="Profanity"):
     def __init__(self, bot):
         self.bot = bot
 
-    @command(name="addprofanity", aliases=["addswears", "addcurses"])
+    @slash_command(name="addprofanity", guild_ids=guilds)
     @has_permissions(manage_guild=True)
     async def add_profanity(self, ctx, *words):
         with open("./assets/bad_words.txt", "a", encoding="utf-8") as f:
             f.write("".join([f"{w}\n" for w in words]))
 
         profanity.load_censor_words_from_file("./assets/bad_words.txt")
-        await ctx.send("Action complete.")
+        await ctx.respond("Action complete.")
 
-    @command(name="delprofanity", aliases=["delswears", "delcurses"])
+    @slash_command(name="delprofanity", guild_ids=guilds)
     @has_permissions(manage_guild=True)
     async def remove_profanity(self, ctx, *words):
         with open("./assets/bad_words.txt", "r", encoding="utf-8") as f:
@@ -28,7 +32,7 @@ class Profanity(Cog, name="Profanity"):
             f.write("".join([f"{w}\n" for w in stored if w not in words]))
 
         profanity.load_censor_words_from_file("./assets/bad_words.txt")
-        await ctx.send("Action complete.")
+        await ctx.respond("Action complete.")
 
     @Cog.listener()
     async def on_message(self, message):
