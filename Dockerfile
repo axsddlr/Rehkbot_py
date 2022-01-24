@@ -7,7 +7,7 @@ RUN apt-get -y update
 # Upgrade already installed packages:
 RUN apt-get -y upgrade
 
-RUN apt-get -y install ffmpeg
+RUN apt-get -y install ffmpeg git
 
 WORKDIR /rehkbot
 

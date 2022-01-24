@@ -1,4 +1,9 @@
-# sloppy and simple queue implementation
+import json
+
+
+cfg = json.loads(open("./config.json", "r").read())
+
+
 class Queue:
     def __init__(self):
         self.items = []

@@ -1,12 +1,8 @@
 import os
 
-import nextcord
-from dotenv import load_dotenv
-from nextcord.ext import commands
-
-load_dotenv()
-TOKEN = os.getenv("DISCORD_TOKEN")
-STREAMER_NAME = os.getenv("STREAMER")
+import discord
+from discord.ext import commands
+from utils.utils import cfg
 
 
 def get_prefix(bot, message):
@@ -27,7 +23,7 @@ def get_prefix(bot, message):
 def main():
     # allows privledged intents for monitoring members joining, roles editing, and role assignments
     # these need to be enabled in the developer portal as well
-    intents = nextcord.Intents.default()
+    intents = discord.Intents.default()
 
     # To enable guild intents:
     intents.guilds = True
@@ -38,8 +34,8 @@ def main():
     intents.messages = True
 
     # Set custom status to "Listening to ?help"
-    activity = nextcord.Activity(
-        type=nextcord.ActivityType.listening, name=f"!help"
+    activity = discord.Activity(
+        type=discord.ActivityType.listening, name=f"!help"
     )
 
     bot = commands.Bot(
@@ -67,7 +63,7 @@ def main():
         print(f"{bot.user.name} has connected to Discord!")
 
     # Run Discord bot
-    bot.run(TOKEN)
+    bot.run(cfg["DISCORD_TOKEN"])
 
 
 # This is what we're going to use to load the cogs on startup

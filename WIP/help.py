@@ -1,6 +1,6 @@
-from nextcord.ext import commands
+from discord.ext import commands
 
-from utils.help_command import NewHelpCommand
+from WIP.help_command import NewHelpCommand
 
 
 class HelpCog(commands.Cog):

@@ -1,8 +1,5 @@
 {
-  "only_push_tweets_from_author": true,
-  "retweet": true,
-  "usernames_to_watch": [
-    "lookner",
-    "elonmusk"
-  ]
+    "DISCORD_TOKEN":"bot-token",
+    "GUILD_ID":123456789,
+    "DISCORD_BOT_ID":123456789
 }

@@ -1,12 +1,12 @@
-import nextcord
-from nextcord.embeds import EmptyEmbed
-from nextcord.ext import commands
+import discord
+from discord.embeds import EmptyEmbed
+from discord.ext import commands
 
 
 class NewHelpCommand(commands.MinimalHelpCommand):
     """Custom help command override using embeds"""
 
-    COLOUR = nextcord.Colour.blurple()
+    COLOUR = discord.Colour.blurple()
 
     def get_ending_note(self):
         """Returns note to display at the bottom"""
@@ -19,7 +19,7 @@ class NewHelpCommand(commands.MinimalHelpCommand):
 
     async def send_bot_help(self, mapping: dict):
         """implements bot command help page"""
-        embed = nextcord.Embed(title="Bot Commands", colour=self.COLOUR)
+        embed = discord.Embed(title="Bot Commands", colour=self.COLOUR)
         avatar = self.context.bot.user.avatar
         avatar_url = avatar.url if avatar else EmptyEmbed
         embed.set_author(name=self.context.bot.user.name, icon_url=avatar_url)
@@ -38,11 +38,11 @@ class NewHelpCommand(commands.MinimalHelpCommand):
                 embed.add_field(name=name, value=value)
 
         embed.set_footer(text=self.get_ending_note())
-        await self.get_destination().send(embed=embed)
+        await self.get_destination().respond(embed=embed)
 
     async def send_cog_help(self, cog: commands.Cog):
         """implements cog help page"""
-        embed = nextcord.Embed(
+        embed = discord.Embed(
             title=f"{cog.qualified_name} Commands", colour=self.COLOUR
         )
         if cog.description:
@@ -57,11 +57,11 @@ class NewHelpCommand(commands.MinimalHelpCommand):
             )
 
         embed.set_footer(text=self.get_ending_note())
-        await self.get_destination().send(embed=embed)
+        await self.get_destination().respond(embed=embed)
 
     async def send_group_help(self, group: commands.Group):
         """implements group help page and command help page"""
-        embed = nextcord.Embed(title=group.qualified_name, colour=self.COLOUR)
+        embed = discord.Embed(title=group.qualified_name, colour=self.COLOUR)
         if group.help:
             embed.description = group.help
 
@@ -75,7 +75,7 @@ class NewHelpCommand(commands.MinimalHelpCommand):
                 )
 
         embed.set_footer(text=self.get_ending_note())
-        await self.get_destination().send(embed=embed)
+        await self.get_destination().respond(embed=embed)
 
     # Use the same function as group help for command help
     send_command_help = send_group_help
