@@ -1,5 +1,5 @@
 aiohttp==3.6.3
-python-dotenv==0.19.2
+python-dotenv==0.20.0
 requests>= 2.18.4
 psutil==5.9.0
 ujson==5.1.0
