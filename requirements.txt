@@ -2,7 +2,7 @@ aiohttp==3.6.3
 python-dotenv==0.21.0
 requests>= 2.18.4
 psutil==5.9.4
-ujson==5.6.0
+ujson==5.7.0
 googletrans==4.0.0rc1
 git+https://github.com/Pycord-Development/pycord
 better-profanity==0.7.0
